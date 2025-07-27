@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, ExternalLink, Music, Calendar, ShoppingBag, ArrowLeft } from "lucide-react";
+// Background image for Brand Nubian page
 const brandNubianBackground = "/lovable-uploads/c37f4de1-fa97-41db-8190-62310623a4a1.png";
 
 interface BrandNubianPageProps {
