@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, ExternalLink, Music, Calendar, ShoppingBag, ArrowLeft } from "lucide-react";
-const brandNubianImage = "/lovable-uploads/631577aa-ed12-456a-8a69-3d1189808fd6.png";
+const brandNubianImage = "/lovable-uploads/b6c40448-d3a9-48b9-b256-336a39a557ba.png";
 
 interface BrandNubianPageProps {
   onBack: () => void;
