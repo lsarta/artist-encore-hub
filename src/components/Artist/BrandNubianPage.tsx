@@ -6,191 +6,160 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, ExternalLink, Music, Calendar, ShoppingBag, ArrowLeft } from "lucide-react";
 // Background image for Brand Nubian page
 const brandNubianBackground = "/lovable-uploads/c37f4de1-fa97-41db-8190-62310623a4a1.png";
-
 interface BrandNubianPageProps {
   onBack: () => void;
 }
-
-export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
+export const BrandNubianPage = ({
+  onBack
+}: BrandNubianPageProps) => {
   const [currentTrack, setCurrentTrack] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  const pastTours = [
-    {
-      date: "Friday 30 August 2024",
-      venue: "Aretha Franklin Amphitheatre",
-      location: "Detroit, MI, US",
-      featuring: ["Slick Rick", "Rakim", "and 4 others"]
-    },
-    {
-      date: "Wednesday 17 July 2024", 
-      venue: "Sony Hall",
-      location: "New York (NYC), NY, US",
-      featuring: ["Termanology", "Diamond D"]
-    },
-    {
-      date: "Saturday 28 October 2023 – Sunday 29 October 2023",
-      venue: "One Musicfest 2023 - Piedmont Park",
-      location: "Atlanta, GA, US",
-      featuring: []
-    },
-    {
-      date: "Friday 29 September 2023",
-      venue: "Elevation 27", 
-      location: "Virginia Beach, VA, US",
-      featuring: []
-    },
-    {
-      date: "Saturday 16 September 2023",
-      venue: "S.O.B.'s",
-      location: "Manhattan, NY, US", 
-      featuring: ["Lord Finesse", "Rah Digga", "and 2 others"]
-    },
-    {
-      date: "Sunday 03 September 2023",
-      venue: "Lady B's Annual Basement Party 2023 - Dell Music Center",
-      location: "Philadelphia, PA, US",
-      featuring: []
-    },
-    {
-      date: "Friday 21 July 2023",
-      venue: "Radio City Music Hall",
-      location: "New York (NYC), NY, US",
-      featuring: ["The Sugarhill Gang", "Slick Rick", "and 18 others"]
-    },
-    {
-      date: "Sunday 02 July 2023",
-      venue: "Mable House Barnes Amphitheatre", 
-      location: "Mableton, GA, US",
-      featuring: ["KRS-One", "Big Daddy Kane", "and 2 others"],
-      outdoor: true
-    },
-    {
-      date: "Saturday 01 July 2023",
-      venue: "Mable House Barnes Amphitheatre",
-      location: "Mableton, GA, US", 
-      featuring: ["KRS-One", "Big Daddy Kane", "and 2 others"],
-      outdoor: true
-    },
-    {
-      date: "Saturday 02 April 2022",
-      venue: "XL Live",
-      location: "Harrisburg, PA, US",
-      featuring: ["Rakim"]
-    },
-    {
-      date: "Thursday 19 August 2021", 
-      venue: "Martha's Vineyard Soulfest 2021 - The Loft",
-      location: "Oak Bluffs, MA, US",
-      featuring: []
-    },
-    {
-      date: "Thursday 18 July 2019",
-      venue: "The Anthem",
-      location: "Washington, DC, US",
-      featuring: ["Monie Love", "DJ Maseo", "and 1 other"]
-    },
-    {
-      date: "Friday 18 January 2019",
-      venue: "Apollo Theater",
-      location: "Manhattan, NY, US", 
-      featuring: ["Rakim", "EPMD", "and 2 others"]
-    },
-    {
-      date: "Friday 14 September 2018",
-      venue: "S.O.B.'s",
-      location: "Manhattan, NY, US",
-      featuring: ["Artifacts", "Main Source", "and 1 other"]
-    },
-    {
-      date: "Friday 15 June 2018",
-      venue: "The Promontory",
-      location: "Chicago, IL, US", 
-      featuring: []
-    },
-    {
-      date: "Friday 23 February 2018",
-      venue: "New Jersey Performing Arts Center",
-      location: "Newark, NJ, US",
-      featuring: ["Bone Thugs-n-Harmony", "Big Daddy Kane", "and 4 others"]
-    },
-    {
-      date: "Saturday 09 September 2017", 
-      venue: "Underground Arts",
-      location: "Philadelphia, PA, US",
-      featuring: ["Das EFX"]
-    },
-    {
-      date: "Saturday 15 July 2017",
-      venue: "The New Parish",
-      location: "Oakland, CA, US",
-      featuring: ["Grand Puba", "Sadat X"]
-    },
-    {
-      date: "Thursday 08 June 2017",
-      venue: "Underground Arts",
-      location: "Philadelphia, PA, US", 
-      featuring: ["Das EFX"]
-    },
-    {
-      date: "Saturday 22 April 2017",
-      venue: "Marina Jeep Arena, Main Street Armory",
-      location: "Rochester, NY, US",
-      featuring: []
-    }
-  ];
-
-  const curatedPlaylist = [
-    {
-      id: "1",
-      title: "The Message",
-      artist: "Grandmaster Flash & The Furious Five",
-      album: "The Message",
-      duration: "7:11",
-      reason: "The blueprint for conscious rap - showed us hip-hop could have a message"
-    },
-    {
-      id: "2", 
-      title: "Fight the Power",
-      artist: "Public Enemy", 
-      album: "Do the Right Thing Soundtrack",
-      duration: "4:45",
-      reason: "Revolutionary energy that inspired our approach to social commentary"
-    },
-    {
-      id: "3",
-      title: "Me Myself and I", 
-      artist: "De La Soul",
-      album: "3 Feet High and Rising",
-      duration: "4:14",
-      reason: "Our Native Tongues family - creative freedom and positive vibes"
-    },
-    {
-      id: "4",
-      title: "Can I Kick It?",
-      artist: "A Tribe Called Quest", 
-      album: "People's Instinctive Travels and the Paths of Rhythm",
-      duration: "4:27",
-      reason: "Jazz samples and smooth flows - major influence on our sound"
-    },
-    {
-      id: "5",
-      title: "I Know You Got Soul",
-      artist: "Eric B. & Rakim",
-      album: "Paid in Full", 
-      duration: "5:05",
-      reason: "Rakim's intellectual approach to lyricism set the bar high"
-    },
-    {
-      id: "6",
-      title: "The Choice Is Yours",
-      artist: "Black Sheep",
-      album: "A Wolf in Sheep's Clothing",
-      duration: "4:17", 
-      reason: "Native Tongues creativity with that raw New York energy"
-    }
-  ];
-
+  const pastTours = [{
+    date: "Friday 30 August 2024",
+    venue: "Aretha Franklin Amphitheatre",
+    location: "Detroit, MI, US",
+    featuring: ["Slick Rick", "Rakim", "and 4 others"]
+  }, {
+    date: "Wednesday 17 July 2024",
+    venue: "Sony Hall",
+    location: "New York (NYC), NY, US",
+    featuring: ["Termanology", "Diamond D"]
+  }, {
+    date: "Saturday 28 October 2023 – Sunday 29 October 2023",
+    venue: "One Musicfest 2023 - Piedmont Park",
+    location: "Atlanta, GA, US",
+    featuring: []
+  }, {
+    date: "Friday 29 September 2023",
+    venue: "Elevation 27",
+    location: "Virginia Beach, VA, US",
+    featuring: []
+  }, {
+    date: "Saturday 16 September 2023",
+    venue: "S.O.B.'s",
+    location: "Manhattan, NY, US",
+    featuring: ["Lord Finesse", "Rah Digga", "and 2 others"]
+  }, {
+    date: "Sunday 03 September 2023",
+    venue: "Lady B's Annual Basement Party 2023 - Dell Music Center",
+    location: "Philadelphia, PA, US",
+    featuring: []
+  }, {
+    date: "Friday 21 July 2023",
+    venue: "Radio City Music Hall",
+    location: "New York (NYC), NY, US",
+    featuring: ["The Sugarhill Gang", "Slick Rick", "and 18 others"]
+  }, {
+    date: "Sunday 02 July 2023",
+    venue: "Mable House Barnes Amphitheatre",
+    location: "Mableton, GA, US",
+    featuring: ["KRS-One", "Big Daddy Kane", "and 2 others"],
+    outdoor: true
+  }, {
+    date: "Saturday 01 July 2023",
+    venue: "Mable House Barnes Amphitheatre",
+    location: "Mableton, GA, US",
+    featuring: ["KRS-One", "Big Daddy Kane", "and 2 others"],
+    outdoor: true
+  }, {
+    date: "Saturday 02 April 2022",
+    venue: "XL Live",
+    location: "Harrisburg, PA, US",
+    featuring: ["Rakim"]
+  }, {
+    date: "Thursday 19 August 2021",
+    venue: "Martha's Vineyard Soulfest 2021 - The Loft",
+    location: "Oak Bluffs, MA, US",
+    featuring: []
+  }, {
+    date: "Thursday 18 July 2019",
+    venue: "The Anthem",
+    location: "Washington, DC, US",
+    featuring: ["Monie Love", "DJ Maseo", "and 1 other"]
+  }, {
+    date: "Friday 18 January 2019",
+    venue: "Apollo Theater",
+    location: "Manhattan, NY, US",
+    featuring: ["Rakim", "EPMD", "and 2 others"]
+  }, {
+    date: "Friday 14 September 2018",
+    venue: "S.O.B.'s",
+    location: "Manhattan, NY, US",
+    featuring: ["Artifacts", "Main Source", "and 1 other"]
+  }, {
+    date: "Friday 15 June 2018",
+    venue: "The Promontory",
+    location: "Chicago, IL, US",
+    featuring: []
+  }, {
+    date: "Friday 23 February 2018",
+    venue: "New Jersey Performing Arts Center",
+    location: "Newark, NJ, US",
+    featuring: ["Bone Thugs-n-Harmony", "Big Daddy Kane", "and 4 others"]
+  }, {
+    date: "Saturday 09 September 2017",
+    venue: "Underground Arts",
+    location: "Philadelphia, PA, US",
+    featuring: ["Das EFX"]
+  }, {
+    date: "Saturday 15 July 2017",
+    venue: "The New Parish",
+    location: "Oakland, CA, US",
+    featuring: ["Grand Puba", "Sadat X"]
+  }, {
+    date: "Thursday 08 June 2017",
+    venue: "Underground Arts",
+    location: "Philadelphia, PA, US",
+    featuring: ["Das EFX"]
+  }, {
+    date: "Saturday 22 April 2017",
+    venue: "Marina Jeep Arena, Main Street Armory",
+    location: "Rochester, NY, US",
+    featuring: []
+  }];
+  const curatedPlaylist = [{
+    id: "1",
+    title: "The Message",
+    artist: "Grandmaster Flash & The Furious Five",
+    album: "The Message",
+    duration: "7:11",
+    reason: "The blueprint for conscious rap - showed us hip-hop could have a message"
+  }, {
+    id: "2",
+    title: "Fight the Power",
+    artist: "Public Enemy",
+    album: "Do the Right Thing Soundtrack",
+    duration: "4:45",
+    reason: "Revolutionary energy that inspired our approach to social commentary"
+  }, {
+    id: "3",
+    title: "Me Myself and I",
+    artist: "De La Soul",
+    album: "3 Feet High and Rising",
+    duration: "4:14",
+    reason: "Our Native Tongues family - creative freedom and positive vibes"
+  }, {
+    id: "4",
+    title: "Can I Kick It?",
+    artist: "A Tribe Called Quest",
+    album: "People's Instinctive Travels and the Paths of Rhythm",
+    duration: "4:27",
+    reason: "Jazz samples and smooth flows - major influence on our sound"
+  }, {
+    id: "5",
+    title: "I Know You Got Soul",
+    artist: "Eric B. & Rakim",
+    album: "Paid in Full",
+    duration: "5:05",
+    reason: "Rakim's intellectual approach to lyricism set the bar high"
+  }, {
+    id: "6",
+    title: "The Choice Is Yours",
+    artist: "Black Sheep",
+    album: "A Wolf in Sheep's Clothing",
+    duration: "4:17",
+    reason: "Native Tongues creativity with that raw New York energy"
+  }];
   const handlePlayPause = (trackIndex: number) => {
     if (currentTrack === trackIndex && isPlaying) {
       setIsPlaying(false);
@@ -199,24 +168,15 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
       setIsPlaying(true);
     }
   };
-
-  return (
-    <div 
-      className="min-h-screen bg-cover bg-center bg-fixed relative"
-      style={{
-        backgroundImage: `url(${brandNubianBackground})`,
-      }}
-    >
+  return <div className="min-h-screen bg-cover bg-center bg-fixed relative" style={{
+    backgroundImage: `url(${brandNubianBackground})`
+  }}>
       {/* Background overlay for readability */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
       
       <div className="relative z-10 container mx-auto px-6 py-8">
         {/* Back Button */}
-        <Button 
-          variant="ghost" 
-          onClick={onBack}
-          className="mb-6 hover:bg-muted/50 bg-black/20 backdrop-blur-sm border border-white/20"
-        >
+        <Button variant="ghost" onClick={onBack} className="mb-6 hover:bg-muted/50 bg-black/20 backdrop-blur-sm border border-white/20">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
         </Button>
@@ -224,9 +184,7 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
         {/* Artist Header */}
         <div className="flex flex-col lg:flex-row gap-8 mb-8">
           <div className="flex-shrink-0">
-            <div className="w-80 h-80 bg-gradient-to-br from-accent/20 to-primary/20 rounded-2xl flex items-center justify-center shadow-2xl border border-white/10 backdrop-blur-sm">
-              <span className="text-8xl font-bold text-white">BN</span>
-            </div>
+            
           </div>
           
           <div className="flex-1">
@@ -283,25 +241,10 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
                 </div>
                 
                 <div className="space-y-3">
-                  {curatedPlaylist.map((track, index) => (
-                    <div 
-                      key={track.id}
-                      className={`p-4 rounded-lg transition-all duration-200 hover:bg-muted/50 ${
-                        currentTrack === index ? 'bg-accent/10 border border-accent/20' : 'bg-muted/20'
-                      }`}
-                    >
+                  {curatedPlaylist.map((track, index) => <div key={track.id} className={`p-4 rounded-lg transition-all duration-200 hover:bg-muted/50 ${currentTrack === index ? 'bg-accent/10 border border-accent/20' : 'bg-muted/20'}`}>
                       <div className="flex items-center gap-4">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 shrink-0"
-                          onClick={() => handlePlayPause(index)}
-                        >
-                          {currentTrack === index && isPlaying ? (
-                            <Pause className="w-4 h-4" />
-                          ) : (
-                            <Play className="w-4 h-4" />
-                          )}
+                        <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => handlePlayPause(index)}>
+                          {currentTrack === index && isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                         </Button>
 
                         <div className="flex-1 min-w-0">
@@ -324,8 +267,7 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </CardContent>
             </Card>
@@ -343,32 +285,23 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
                 </div>
                 
                 <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {pastTours.map((tour, index) => (
-                    <div 
-                      key={index}
-                      className="p-4 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors border-l-4 border-accent/30"
-                    >
+                  {pastTours.map((tour, index) => <div key={index} className="p-4 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors border-l-4 border-accent/30">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <Calendar className="w-4 h-4 text-muted-foreground" />
                             <span className="font-medium text-sm text-muted-foreground">{tour.date}</span>
                             <Badge variant="outline" className="text-xs">Completed</Badge>
-                            {tour.outdoor && (
-                              <Badge variant="secondary" className="text-xs">Outdoor</Badge>
-                            )}
+                            {tour.outdoor && <Badge variant="secondary" className="text-xs">Outdoor</Badge>}
                           </div>
                           <h4 className="font-semibold mb-1">{tour.venue}</h4>
                           <p className="text-sm text-muted-foreground mb-2">{tour.location}</p>
-                          {tour.featuring.length > 0 && (
-                            <p className="text-xs text-muted-foreground">
+                          {tour.featuring.length > 0 && <p className="text-xs text-muted-foreground">
                               <span className="font-medium">Featuring:</span> {tour.featuring.join(", ")}
-                            </p>
-                          )}
+                            </p>}
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </CardContent>
             </Card>
@@ -390,6 +323,5 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
-  );
+    </div>;
 };
