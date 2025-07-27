@@ -18,7 +18,7 @@ export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
               <span className="text-4xl font-bold text-primary">{artistName.charAt(0)}</span>
             </div>
             <h1 className="text-5xl font-bold tracking-tight text-foreground mb-4">
-              {artistName}
+              Brand Nubian
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Welcome to the official hub for tours, playlists, and merchandise.
