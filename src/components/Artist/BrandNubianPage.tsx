@@ -235,7 +235,7 @@ export const BrandNubianPage = ({
             <Card className="border-0 bg-card/50 backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="mb-6">
-                  <h3 className="text-2xl font-semibold mb-2">Songs That Influenced Us</h3>
+                  <h3 className="text-2xl font-semibold mb-2">Songs That Move Us</h3>
                   <p className="text-muted-foreground">A collection of tracks that shaped our sound and message</p>
                   <Badge variant="secondary" className="mt-2">
                     {curatedPlaylist.length} tracks
