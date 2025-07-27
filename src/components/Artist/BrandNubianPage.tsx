@@ -328,21 +328,25 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
             <Card className="border-0 bg-card/50 backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="mb-6">
-                  <h3 className="text-2xl font-semibold mb-2">Past Tours & Performances</h3>
-                  <p className="text-muted-foreground">Recent Brand Nubian live performances and tour dates</p>
+                  <h3 className="text-2xl font-semibold mb-2">Post Show Archives</h3>
+                  <p className="text-muted-foreground">Past Brand Nubian performances and tour history</p>
+                  <Badge variant="secondary" className="mt-2">
+                    {pastTours.length} past shows
+                  </Badge>
                 </div>
                 
                 <div className="space-y-4 max-h-96 overflow-y-auto">
                   {pastTours.map((tour, index) => (
                     <div 
                       key={index}
-                      className="p-4 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors"
+                      className="p-4 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors border-l-4 border-accent/30"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <Calendar className="w-4 h-4 text-accent" />
-                            <span className="font-medium text-sm">{tour.date}</span>
+                            <Calendar className="w-4 h-4 text-muted-foreground" />
+                            <span className="font-medium text-sm text-muted-foreground">{tour.date}</span>
+                            <Badge variant="outline" className="text-xs">Completed</Badge>
                             {tour.outdoor && (
                               <Badge variant="secondary" className="text-xs">Outdoor</Badge>
                             )}
