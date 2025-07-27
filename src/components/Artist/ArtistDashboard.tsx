@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Users, ShoppingBag, Camera, BarChart3, Plus } from "lucide-react";
+import { Calendar, Users, ShoppingBag, Camera, BarChart3, Plus, Music } from "lucide-react";
+import { Playlist } from "./Playlist";
 
 export const ArtistDashboard = () => {
   const quickStats = [
@@ -12,9 +13,9 @@ export const ArtistDashboard = () => {
 
   const quickActions = [
     { title: "Add Tour Date", icon: Calendar, description: "Schedule a new show" },
-    { title: "Upload Photos", icon: Camera, description: "Share new gallery content" },
+    { title: "Manage Photos", icon: Camera, description: "Review fan uploads" },
     { title: "Add Merchandise", icon: ShoppingBag, description: "Create new product" },
-    { title: "View Analytics", icon: BarChart3, description: "Check performance metrics" },
+    { title: "Update Playlist", icon: Music, description: "Add inspiring tracks" },
   ];
 
   return (
@@ -73,45 +74,78 @@ export const ArtistDashboard = () => {
         </CardContent>
       </Card>
 
-      {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-0 bg-card/50 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Upcoming Events</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {[1, 2, 3].map((_, index) => (
-              <div key={index} className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
-                <div>
-                  <p className="font-medium">Show #{index + 1}</p>
-                  <p className="text-sm text-muted-foreground">Jan {15 + index}, 2024</p>
-                </div>
-                <Button variant="ghost" size="sm">
-                  View
-                </Button>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+      {/* Playlist Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Playlist />
+        </div>
 
-        <Card className="border-0 bg-card/50 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {[
-              "New merchandise order received",
-              "Fan uploaded photo from latest show",
-              "Tour date added for March 2024"
-            ].map((activity, index) => (
-              <div key={index} className="flex items-center gap-3 p-4 rounded-lg bg-muted/50">
-                <div className="w-2 h-2 bg-accent rounded-full"></div>
-                <p className="text-sm">{activity}</p>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+        {/* Quick Stats Sidebar */}
+        <div className="space-y-6">
+          <Card className="border-0 bg-card/50 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                "Fan uploaded photo from latest show",
+                "New merchandise order received", 
+                "Tour date added for March 2024"
+              ].map((activity, index) => (
+                <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                  <div className="w-2 h-2 bg-accent rounded-full"></div>
+                  <p className="text-sm">{activity}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 bg-card/50 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle>Upcoming Events</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[1, 2, 3].map((_, index) => (
+                <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  <div>
+                    <p className="font-medium text-sm">Show #{index + 1}</p>
+                    <p className="text-xs text-muted-foreground">Jan {15 + index}, 2024</p>
+                  </div>
+                  <Button variant="ghost" size="sm" className="text-xs">
+                    View
+                  </Button>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
       </div>
+
+      {/* Photo Management */}
+      <Card className="border-0 bg-card/50 backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            Photo Management
+            <Button variant="outline" size="sm">View All</Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center p-4 rounded-lg bg-muted/50">
+              <p className="text-2xl font-bold text-accent">12</p>
+              <p className="text-sm text-muted-foreground">Pending Approval</p>
+            </div>
+            <div className="text-center p-4 rounded-lg bg-muted/50">
+              <p className="text-2xl font-bold text-accent">73</p>
+              <p className="text-sm text-muted-foreground">Featured Photos</p>
+            </div>
+            <div className="text-center p-4 rounded-lg bg-muted/50">
+              <p className="text-2xl font-bold text-accent">156</p>
+              <p className="text-sm text-muted-foreground">Total Gallery</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

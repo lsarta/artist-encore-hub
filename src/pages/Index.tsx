@@ -3,12 +3,13 @@ import { ThemeProvider } from "next-themes";
 import { DashboardHeader } from "@/components/Layout/DashboardHeader";
 import { FanLanding } from "@/components/Fan/FanLanding";
 import { ArtistDashboard } from "@/components/Artist/ArtistDashboard";
+import { ToursPage } from "@/components/Tours/ToursPage";
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<'fan' | 'artist' | 'tours' | 'gallery' | 'shop'>('fan');
+  const [currentView, setCurrentView] = useState<'fan' | 'artist' | 'tours' | 'shop'>('fan');
   const artistName = "The Artist"; // This would come from your data
 
-  const handleFanNavigation = (page: 'tours' | 'gallery' | 'shop') => {
+  const handleFanNavigation = (page: 'tours' | 'shop') => {
     setCurrentView(page);
   };
 
@@ -19,35 +20,7 @@ const Index = () => {
       case 'artist':
         return <ArtistDashboard />;
       case 'tours':
-        return (
-          <div className="container mx-auto px-6 py-12">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">Tour Dates</h1>
-              <p className="text-muted-foreground mb-8">Coming soon...</p>
-              <button 
-                onClick={() => setCurrentView('fan')}
-                className="text-accent hover:underline"
-              >
-                ← Back to home
-              </button>
-            </div>
-          </div>
-        );
-      case 'gallery':
-        return (
-          <div className="container mx-auto px-6 py-12">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">Photo Gallery</h1>
-              <p className="text-muted-foreground mb-8">Coming soon...</p>
-              <button 
-                onClick={() => setCurrentView('fan')}
-                className="text-accent hover:underline"
-              >
-                ← Back to home
-              </button>
-            </div>
-          </div>
-        );
+        return <ToursPage onBack={() => setCurrentView('fan')} />;
       case 'shop':
         return (
           <div className="container mx-auto px-6 py-12">

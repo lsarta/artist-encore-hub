@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Calendar, ShoppingBag, Camera } from "lucide-react";
+import { Calendar, ShoppingBag, Music } from "lucide-react";
 
 interface FanLandingProps {
   artistName: string;
-  onNavigate: (page: 'tours' | 'gallery' | 'shop') => void;
+  onNavigate: (page: 'tours' | 'shop') => void;
 }
 
 export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
@@ -21,7 +21,7 @@ export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
               {artistName}
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Welcome to the official hub for tours, exclusive content, and merchandise.
+              Welcome to the official hub for tours, playlists, and merchandise.
             </p>
           </div>
         </div>
@@ -38,22 +38,21 @@ export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
               </div>
               <h3 className="text-2xl font-semibold mb-3">Tours</h3>
               <p className="text-muted-foreground">
-                View upcoming shows and tour dates
+                View shows, photos, and tour moments
               </p>
             </div>
           </Card>
 
           <Card 
             className="p-8 hover:shadow-xl transition-all duration-300 cursor-pointer group border-0 bg-card/50 backdrop-blur-sm"
-            onClick={() => onNavigate('gallery')}
           >
             <div className="text-center">
               <div className="w-16 h-16 mx-auto bg-accent/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                <Camera className="w-8 h-8 text-accent" />
+                <Music className="w-8 h-8 text-accent" />
               </div>
-              <h3 className="text-2xl font-semibold mb-3">Gallery</h3>
+              <h3 className="text-2xl font-semibold mb-3">Playlist</h3>
               <p className="text-muted-foreground">
-                Explore exclusive photos and moments
+                Discover curated music recommendations
               </p>
             </div>
           </Card>
