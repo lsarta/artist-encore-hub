@@ -181,6 +181,11 @@ export const BrandNubianPage = ({
           Back to Dashboard
         </Button>
 
+        {/* Artist Title */}
+        <h1 className="text-5xl font-bold mb-8 text-white drop-shadow-lg">
+          Brand Nubian
+        </h1>
+
         {/* Artist Header */}
         <div className="flex flex-col lg:flex-row gap-8 mb-8">
           <div className="flex-shrink-0">
@@ -190,9 +195,6 @@ export const BrandNubianPage = ({
           <div className="flex-1">
             <div className="mb-4">
               <Badge variant="secondary" className="mb-4 bg-black/40 backdrop-blur-sm border border-white/20">Hip-Hop Group</Badge>
-              <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">
-                Brand Nubian
-              </h1>
             </div>
             
             <div className="prose prose-lg text-white/90 max-w-none drop-shadow-md">
