@@ -187,31 +187,20 @@ export const BrandNubianPage = ({
         </h1>
         <Badge variant="secondary" className="mb-8 bg-black/60 backdrop-blur-md border border-white/50 text-white">Hip-Hop Group</Badge>
 
-        {/* Artist Header */}
-        <div className="flex flex-col lg:flex-row gap-8 mb-8">
-          <div className="flex-shrink-0">
-            
-          </div>
-          
-          <div className="flex-1">
-            <div className="mb-4">
-            </div>
-            
-            <div className="prose prose-lg text-white/90 max-w-none drop-shadow-md">
-              <p className="mb-4">
-                Brand Nubian emerged from New Rochelle, New York in 1989, founded by Grand Puba, Lord Jamar, Sadat X, and DJ Alamo. The group quickly established themselves as prominent voices in conscious hip-hop, blending socially aware lyrics with infectious beats.
-              </p>
-              <p className="mb-4">
-                Their 1990 debut album "One for All" became a critical and commercial success, featuring the hit single "Slow Down," which showcased their smooth, jazz-influenced production style. Grand Puba's charismatic delivery helped define the Native Tongues movement alongside De La Soul and A Tribe Called Quest.
-              </p>
-              <p className="mb-4">
-                After Grand Puba departed for a solo career in 1991, the remaining trio continued, releasing "In God We Trust" (1993), which included "Punks Jump Up to Get Beat Down." Their music incorporated Five Percent Nation philosophy and Afrocentric themes, contributing to hip-hop's intellectual discourse.
-              </p>
-              <p>
-                Brand Nubian's influence extends far beyond chart success. They helped establish the template for conscious rap that balanced message with accessibility, inspiring artists to address social issues without sacrificing musical appeal. Their sophisticated sampling techniques and group dynamics significantly influenced East Coast hip-hop development throughout the 1990s.
-              </p>
-            </div>
-          </div>
+        {/* Artist Bio */}
+        <div className="prose prose-lg text-white/90 max-w-none drop-shadow-md mb-8">
+          <p className="mb-4">
+            Brand Nubian emerged from New Rochelle, New York in 1989, founded by Grand Puba, Lord Jamar, Sadat X, and DJ Alamo. The group quickly established themselves as prominent voices in conscious hip-hop, blending socially aware lyrics with infectious beats.
+          </p>
+          <p className="mb-4">
+            Their 1990 debut album "One for All" became a critical and commercial success, featuring the hit single "Slow Down," which showcased their smooth, jazz-influenced production style. Grand Puba's charismatic delivery helped define the Native Tongues movement alongside De La Soul and A Tribe Called Quest.
+          </p>
+          <p className="mb-4">
+            After Grand Puba departed for a solo career in 1991, the remaining trio continued, releasing "In God We Trust" (1993), which included "Punks Jump Up to Get Beat Down." Their music incorporated Five Percent Nation philosophy and Afrocentric themes, contributing to hip-hop's intellectual discourse.
+          </p>
+          <p>
+            Brand Nubian's influence extends far beyond chart success. They helped establish the template for conscious rap that balanced message with accessibility, inspiring artists to address social issues without sacrificing musical appeal. Their sophisticated sampling techniques and group dynamics significantly influenced East Coast hip-hop development throughout the 1990s.
+          </p>
         </div>
 
         {/* Navigation Tabs */}
