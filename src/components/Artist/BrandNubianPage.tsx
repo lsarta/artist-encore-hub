@@ -176,7 +176,7 @@ export const BrandNubianPage = ({
       
       <div className="relative z-10 container mx-auto px-6 py-8">
         {/* Back Button */}
-        <Button variant="ghost" onClick={onBack} className="mb-6 hover:bg-muted/50 bg-black/20 backdrop-blur-sm border border-white/20">
+        <Button variant="ghost" onClick={onBack} className="mb-6 hover:bg-black/60 bg-black/50 backdrop-blur-md border border-white/40 text-white hover:text-white">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
         </Button>
