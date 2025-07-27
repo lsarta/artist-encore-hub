@@ -14,6 +14,131 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
   const [currentTrack, setCurrentTrack] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const pastTours = [
+    {
+      date: "Friday 30 August 2024",
+      venue: "Aretha Franklin Amphitheatre",
+      location: "Detroit, MI, US",
+      featuring: ["Slick Rick", "Rakim", "and 4 others"]
+    },
+    {
+      date: "Wednesday 17 July 2024", 
+      venue: "Sony Hall",
+      location: "New York (NYC), NY, US",
+      featuring: ["Termanology", "Diamond D"]
+    },
+    {
+      date: "Saturday 28 October 2023 – Sunday 29 October 2023",
+      venue: "One Musicfest 2023 - Piedmont Park",
+      location: "Atlanta, GA, US",
+      featuring: []
+    },
+    {
+      date: "Friday 29 September 2023",
+      venue: "Elevation 27", 
+      location: "Virginia Beach, VA, US",
+      featuring: []
+    },
+    {
+      date: "Saturday 16 September 2023",
+      venue: "S.O.B.'s",
+      location: "Manhattan, NY, US", 
+      featuring: ["Lord Finesse", "Rah Digga", "and 2 others"]
+    },
+    {
+      date: "Sunday 03 September 2023",
+      venue: "Lady B's Annual Basement Party 2023 - Dell Music Center",
+      location: "Philadelphia, PA, US",
+      featuring: []
+    },
+    {
+      date: "Friday 21 July 2023",
+      venue: "Radio City Music Hall",
+      location: "New York (NYC), NY, US",
+      featuring: ["The Sugarhill Gang", "Slick Rick", "and 18 others"]
+    },
+    {
+      date: "Sunday 02 July 2023",
+      venue: "Mable House Barnes Amphitheatre", 
+      location: "Mableton, GA, US",
+      featuring: ["KRS-One", "Big Daddy Kane", "and 2 others"],
+      outdoor: true
+    },
+    {
+      date: "Saturday 01 July 2023",
+      venue: "Mable House Barnes Amphitheatre",
+      location: "Mableton, GA, US", 
+      featuring: ["KRS-One", "Big Daddy Kane", "and 2 others"],
+      outdoor: true
+    },
+    {
+      date: "Saturday 02 April 2022",
+      venue: "XL Live",
+      location: "Harrisburg, PA, US",
+      featuring: ["Rakim"]
+    },
+    {
+      date: "Thursday 19 August 2021", 
+      venue: "Martha's Vineyard Soulfest 2021 - The Loft",
+      location: "Oak Bluffs, MA, US",
+      featuring: []
+    },
+    {
+      date: "Thursday 18 July 2019",
+      venue: "The Anthem",
+      location: "Washington, DC, US",
+      featuring: ["Monie Love", "DJ Maseo", "and 1 other"]
+    },
+    {
+      date: "Friday 18 January 2019",
+      venue: "Apollo Theater",
+      location: "Manhattan, NY, US", 
+      featuring: ["Rakim", "EPMD", "and 2 others"]
+    },
+    {
+      date: "Friday 14 September 2018",
+      venue: "S.O.B.'s",
+      location: "Manhattan, NY, US",
+      featuring: ["Artifacts", "Main Source", "and 1 other"]
+    },
+    {
+      date: "Friday 15 June 2018",
+      venue: "The Promontory",
+      location: "Chicago, IL, US", 
+      featuring: []
+    },
+    {
+      date: "Friday 23 February 2018",
+      venue: "New Jersey Performing Arts Center",
+      location: "Newark, NJ, US",
+      featuring: ["Bone Thugs-n-Harmony", "Big Daddy Kane", "and 4 others"]
+    },
+    {
+      date: "Saturday 09 September 2017", 
+      venue: "Underground Arts",
+      location: "Philadelphia, PA, US",
+      featuring: ["Das EFX"]
+    },
+    {
+      date: "Saturday 15 July 2017",
+      venue: "The New Parish",
+      location: "Oakland, CA, US",
+      featuring: ["Grand Puba", "Sadat X"]
+    },
+    {
+      date: "Thursday 08 June 2017",
+      venue: "Underground Arts",
+      location: "Philadelphia, PA, US", 
+      featuring: ["Das EFX"]
+    },
+    {
+      date: "Saturday 22 April 2017",
+      venue: "Marina Jeep Arena, Main Street Armory",
+      location: "Rochester, NY, US",
+      featuring: []
+    }
+  ];
+
   const curatedPlaylist = [
     {
       id: "1",
@@ -201,15 +326,39 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
 
           <TabsContent value="tours">
             <Card className="border-0 bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-8 text-center">
-                <Calendar className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-2xl font-semibold mb-2">Tour Dates</h3>
-                <p className="text-muted-foreground mb-6">
-                  Stay tuned for upcoming Brand Nubian tour announcements and special performances.
-                </p>
-                <Button variant="outline">
-                  Get Notified
-                </Button>
+              <CardContent className="p-6">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-semibold mb-2">Past Tours & Performances</h3>
+                  <p className="text-muted-foreground">Recent Brand Nubian live performances and tour dates</p>
+                </div>
+                
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {pastTours.map((tour, index) => (
+                    <div 
+                      key={index}
+                      className="p-4 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Calendar className="w-4 h-4 text-accent" />
+                            <span className="font-medium text-sm">{tour.date}</span>
+                            {tour.outdoor && (
+                              <Badge variant="secondary" className="text-xs">Outdoor</Badge>
+                            )}
+                          </div>
+                          <h4 className="font-semibold mb-1">{tour.venue}</h4>
+                          <p className="text-sm text-muted-foreground mb-2">{tour.location}</p>
+                          {tour.featuring.length > 0 && (
+                            <p className="text-xs text-muted-foreground">
+                              <span className="font-medium">Featuring:</span> {tour.featuring.join(", ")}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
