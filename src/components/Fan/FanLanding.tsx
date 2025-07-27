@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Calendar, ShoppingBag, Music } from "lucide-react";
-
 interface FanLandingProps {
   artistName: string;
   onNavigate: (page: 'tours' | 'shop') => void;
 }
-
-export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+export const FanLanding = ({
+  artistName,
+  onNavigate
+}: FanLandingProps) => {
+  return <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="container mx-auto px-6 py-12">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -20,18 +20,13 @@ export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
             <h1 className="text-5xl font-bold tracking-tight text-foreground mb-4">
               Brand Nubian
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Welcome to the official hub for tours, playlists, and merchandise.
-            </p>
+            
           </div>
         </div>
 
         {/* Navigation Cards */}
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <Card 
-            className="p-8 hover:shadow-xl transition-all duration-300 cursor-pointer group border-0 bg-card/50 backdrop-blur-sm"
-            onClick={() => onNavigate('tours')}
-          >
+          <Card className="p-8 hover:shadow-xl transition-all duration-300 cursor-pointer group border-0 bg-card/50 backdrop-blur-sm" onClick={() => onNavigate('tours')}>
             <div className="text-center">
               <div className="w-16 h-16 mx-auto bg-accent/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
                 <Calendar className="w-8 h-8 text-accent" />
@@ -43,9 +38,7 @@ export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
             </div>
           </Card>
 
-          <Card 
-            className="p-8 hover:shadow-xl transition-all duration-300 cursor-pointer group border-0 bg-card/50 backdrop-blur-sm"
-          >
+          <Card className="p-8 hover:shadow-xl transition-all duration-300 cursor-pointer group border-0 bg-card/50 backdrop-blur-sm">
             <div className="text-center">
               <div className="w-16 h-16 mx-auto bg-accent/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
                 <Music className="w-8 h-8 text-accent" />
@@ -57,10 +50,7 @@ export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
             </div>
           </Card>
 
-          <Card 
-            className="p-8 hover:shadow-xl transition-all duration-300 cursor-pointer group border-0 bg-card/50 backdrop-blur-sm"
-            onClick={() => onNavigate('shop')}
-          >
+          <Card className="p-8 hover:shadow-xl transition-all duration-300 cursor-pointer group border-0 bg-card/50 backdrop-blur-sm" onClick={() => onNavigate('shop')}>
             <div className="text-center">
               <div className="w-16 h-16 mx-auto bg-accent/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
                 <ShoppingBag className="w-8 h-8 text-accent" />
@@ -80,6 +70,5 @@ export const FanLanding = ({ artistName, onNavigate }: FanLandingProps) => {
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
