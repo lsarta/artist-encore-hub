@@ -1,23 +1,19 @@
 import { useState } from "react";
 import { ThemeProvider } from "next-themes";
 import { DashboardHeader } from "@/components/Layout/DashboardHeader";
-import { FanLanding } from "@/components/Fan/FanLanding";
 import { ArtistDashboard } from "@/components/Artist/ArtistDashboard";
 import { ToursPage } from "@/components/Tours/ToursPage";
 import { BrandNubianPage } from "@/components/Artist/BrandNubianPage";
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<'fan' | 'artist' | 'tours' | 'shop' | 'brand-nubian'>('fan');
+  const [currentView, setCurrentView] = useState<'fan' | 'artist' | 'tours' | 'shop'>('fan');
   const artistName = "The Artist"; // This would come from your data
 
-  const handleFanNavigation = (page: 'tours' | 'shop') => {
-    setCurrentView(page);
-  };
 
   const renderContent = () => {
     switch (currentView) {
       case 'fan':
-        return <FanLanding artistName={artistName} onNavigate={handleFanNavigation} />;
+        return <BrandNubianPage onBack={() => setCurrentView('fan')} />;
       case 'artist':
         return <ArtistDashboard />;
       case 'tours':
@@ -37,10 +33,8 @@ const Index = () => {
             </div>
           </div>
         );
-      case 'brand-nubian':
-        return <BrandNubianPage onBack={() => setCurrentView('artist')} />;
       default:
-        return <FanLanding artistName={artistName} onNavigate={handleFanNavigation} />;
+        return <BrandNubianPage onBack={() => setCurrentView('fan')} />;
     }
   };
 
@@ -56,25 +50,19 @@ const Index = () => {
         
         {renderContent()}
         
-        {/* Demo toggle for development */}
-        <div className="fixed bottom-4 right-4 space-x-2">
+        {/* Navigation buttons - moved to top right */}
+        <div className="fixed top-4 right-4 space-y-2 z-50">
           <button
             onClick={() => setCurrentView('fan')}
-            className={`px-3 py-1 rounded text-sm ${currentView === 'fan' ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}
+            className={`block w-full px-4 py-2 rounded text-sm font-medium transition-all ${currentView === 'fan' ? 'bg-accent text-accent-foreground shadow-lg' : 'bg-black/60 backdrop-blur-md border border-white/40 text-white hover:bg-black/80'}`}
           >
             Fan View
           </button>
           <button
             onClick={() => setCurrentView('artist')}
-            className={`px-3 py-1 rounded text-sm ${currentView === 'artist' ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}
+            className={`block w-full px-4 py-2 rounded text-sm font-medium transition-all ${currentView === 'artist' ? 'bg-accent text-accent-foreground shadow-lg' : 'bg-black/60 backdrop-blur-md border border-white/40 text-white hover:bg-black/80'}`}
           >
             Artist View
-          </button>
-          <button
-            onClick={() => setCurrentView('brand-nubian')}
-            className={`px-3 py-1 rounded text-sm ${currentView === 'brand-nubian' ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}
-          >
-            Brand Nubian
           </button>
         </div>
       </div>
