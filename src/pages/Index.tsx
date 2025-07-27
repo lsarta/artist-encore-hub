@@ -4,9 +4,10 @@ import { DashboardHeader } from "@/components/Layout/DashboardHeader";
 import { FanLanding } from "@/components/Fan/FanLanding";
 import { ArtistDashboard } from "@/components/Artist/ArtistDashboard";
 import { ToursPage } from "@/components/Tours/ToursPage";
+import { BrandNubianPage } from "@/components/Artist/BrandNubianPage";
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<'fan' | 'artist' | 'tours' | 'shop'>('fan');
+  const [currentView, setCurrentView] = useState<'fan' | 'artist' | 'tours' | 'shop' | 'brand-nubian'>('fan');
   const artistName = "The Artist"; // This would come from your data
 
   const handleFanNavigation = (page: 'tours' | 'shop') => {
@@ -36,6 +37,8 @@ const Index = () => {
             </div>
           </div>
         );
+      case 'brand-nubian':
+        return <BrandNubianPage onBack={() => setCurrentView('artist')} />;
       default:
         return <FanLanding artistName={artistName} onNavigate={handleFanNavigation} />;
     }
@@ -66,6 +69,12 @@ const Index = () => {
             className={`px-3 py-1 rounded text-sm ${currentView === 'artist' ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}
           >
             Artist View
+          </button>
+          <button
+            onClick={() => setCurrentView('brand-nubian')}
+            className={`px-3 py-1 rounded text-sm ${currentView === 'brand-nubian' ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}
+          >
+            Brand Nubian
           </button>
         </div>
       </div>
