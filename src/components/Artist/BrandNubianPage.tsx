@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, ExternalLink, Music, Calendar, ShoppingBag, ArrowLeft } from "lucide-react";
-const brandNubianImage = "/lovable-uploads/b6c40448-d3a9-48b9-b256-336a39a557ba.png";
+const brandNubianBackground = "/lovable-uploads/c37f4de1-fa97-41db-8190-62310623a4a1.png";
 
 interface BrandNubianPageProps {
   onBack: () => void;
@@ -200,13 +200,21 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-6 py-8">
+    <div 
+      className="min-h-screen bg-cover bg-center bg-fixed relative"
+      style={{
+        backgroundImage: `url(${brandNubianBackground})`,
+      }}
+    >
+      {/* Background overlay for readability */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
+      
+      <div className="relative z-10 container mx-auto px-6 py-8">
         {/* Back Button */}
         <Button 
           variant="ghost" 
           onClick={onBack}
-          className="mb-6 hover:bg-muted/50"
+          className="mb-6 hover:bg-muted/50 bg-black/20 backdrop-blur-sm border border-white/20"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
@@ -215,22 +223,20 @@ export const BrandNubianPage = ({ onBack }: BrandNubianPageProps) => {
         {/* Artist Header */}
         <div className="flex flex-col lg:flex-row gap-8 mb-8">
           <div className="flex-shrink-0">
-            <img 
-              src={brandNubianImage} 
-              alt="Brand Nubian"
-              className="w-80 h-80 object-cover rounded-2xl shadow-2xl"
-            />
+            <div className="w-80 h-80 bg-gradient-to-br from-accent/20 to-primary/20 rounded-2xl flex items-center justify-center shadow-2xl border border-white/10 backdrop-blur-sm">
+              <span className="text-8xl font-bold text-white">BN</span>
+            </div>
           </div>
           
           <div className="flex-1">
             <div className="mb-4">
-              <Badge variant="secondary" className="mb-4">Hip-Hop Group</Badge>
-              <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+              <Badge variant="secondary" className="mb-4 bg-black/40 backdrop-blur-sm border border-white/20">Hip-Hop Group</Badge>
+              <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">
                 Brand Nubian
               </h1>
             </div>
             
-            <div className="prose prose-lg text-muted-foreground max-w-none">
+            <div className="prose prose-lg text-white/90 max-w-none drop-shadow-md">
               <p className="mb-4">
                 Brand Nubian emerged from New Rochelle, New York in 1989, founded by Grand Puba, Lord Jamar, Sadat X, and DJ Alamo. The group quickly established themselves as prominent voices in conscious hip-hop, blending socially aware lyrics with infectious beats.
               </p>
