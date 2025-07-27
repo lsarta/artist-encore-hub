@@ -242,27 +242,27 @@ export const BrandNubianPage = ({
                   </Badge>
                 </div>
                 
-                <div className="space-y-3">
-                  {curatedPlaylist.map((track, index) => <div key={track.id} className={`p-4 rounded-lg transition-all duration-200 hover:bg-muted/50 ${currentTrack === index ? 'bg-accent/10 border border-accent/20' : 'bg-muted/20'}`}>
-                      <div className="flex items-center gap-4">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => handlePlayPause(index)}>
-                          {currentTrack === index && isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                <div className="space-y-2">
+                  {curatedPlaylist.map((track, index) => <div key={track.id} className={`p-2 sm:p-3 rounded-lg transition-all duration-200 hover:bg-muted/50 ${currentTrack === index ? 'bg-accent/10 border border-accent/20' : 'bg-muted/20'}`}>
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <Button variant="ghost" size="icon" className="h-6 w-6 sm:h-8 sm:w-8 shrink-0" onClick={() => handlePlayPause(index)}>
+                          {currentTrack === index && isPlaying ? <Pause className="w-3 h-3 sm:w-4 sm:h-4" /> : <Play className="w-3 h-3 sm:w-4 sm:h-4" />}
                         </Button>
 
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-0">
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-medium truncate">{track.title}</h4>
-                              <p className="text-sm text-muted-foreground truncate">
+                              <h4 className="font-medium truncate text-sm sm:text-base">{track.title}</h4>
+                              <p className="text-xs sm:text-sm text-muted-foreground truncate">
                                 {track.artist} • {track.album}
                               </p>
-                              <p className="text-xs text-muted-foreground mt-1 italic">
+                              <p className="text-xs text-muted-foreground mt-1 italic line-clamp-2 sm:line-clamp-1">
                                 "{track.reason}"
                               </p>
                             </div>
-                            <div className="flex items-center gap-2 ml-4">
+                            <div className="flex items-center justify-between sm:justify-center gap-2 sm:ml-4">
                               <span className="text-xs text-muted-foreground">{track.duration}</span>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Button variant="ghost" size="icon" className="h-6 w-6 sm:h-8 sm:w-8">
                                 <ExternalLink className="w-3 h-3" />
                               </Button>
                             </div>
