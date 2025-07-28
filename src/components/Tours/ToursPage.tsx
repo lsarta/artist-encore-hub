@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, MapPin, Camera, Plus, Heart, MessageCircle } from "lucide-react";
 import { ShowCard } from "./ShowCard";
 import { FanGallery } from "./FanGallery";
+import { useTours } from "@/hooks/useTours";
 
 interface ToursPageProps {
   onBack: () => void;
@@ -13,60 +14,10 @@ interface ToursPageProps {
 
 export const ToursPage = ({ onBack }: ToursPageProps) => {
   const [selectedShow, setSelectedShow] = useState<string | null>(null);
-
-  const upcomingShows = [
-    {
-      id: "1",
-      title: "Summer Festival 2024",
-      date: "2024-08-15",
-      venue: "Central Park",
-      city: "New York, NY",
-      status: "upcoming" as const,
-      photoCount: 0
-    },
-    {
-      id: "2", 
-      title: "Acoustic Night",
-      date: "2024-09-22",
-      venue: "The Blue Note",
-      city: "Nashville, TN", 
-      status: "upcoming" as const,
-      photoCount: 0
-    },
-  ];
-
-  const pastShows = [
-    {
-      id: "3",
-      title: "Winter Tour 2023",
-      date: "2023-12-10",
-      venue: "Madison Square Garden",
-      city: "New York, NY",
-      status: "past" as const,
-      photoCount: 24
-    },
-    {
-      id: "4",
-      title: "Indie Rock Festival",
-      date: "2023-11-05", 
-      venue: "Red Rocks",
-      city: "Denver, CO",
-      status: "past" as const,
-      photoCount: 18
-    },
-    {
-      id: "5",
-      title: "Album Release Party",
-      date: "2023-10-15",
-      venue: "The Troubadour", 
-      city: "Los Angeles, CA",
-      status: "past" as const,
-      photoCount: 31
-    },
-  ];
+  const { upcomingTours: upcomingShows, pastTours: pastShows, getTourById } = useTours();
 
   if (selectedShow) {
-    const show = [...upcomingShows, ...pastShows].find(s => s.id === selectedShow);
+    const show = getTourById(selectedShow);
     if (show) {
       return <FanGallery show={show} onBack={() => setSelectedShow(null)} />;
     }

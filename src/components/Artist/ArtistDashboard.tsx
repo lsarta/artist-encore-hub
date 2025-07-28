@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Users, ShoppingBag, Camera, BarChart3, Plus, Music } from "lucide-react";
 import { Playlist } from "./Playlist";
+import { TourManager } from "./TourManager";
 
 export const ArtistDashboard = () => {
+  const [currentView, setCurrentView] = useState<'dashboard' | 'tours'>('dashboard');
   const quickStats = [
     { title: "Upcoming Shows", value: "12", icon: Calendar, color: "text-accent" },
     { title: "Total Fans", value: "24.5K", icon: Users, color: "text-accent" },
@@ -12,11 +15,15 @@ export const ArtistDashboard = () => {
   ];
 
   const quickActions = [
-    { title: "Manage Photos", icon: Camera, description: "Review fan uploads" },
-    { title: "Edit Tour Dates", icon: Calendar, description: "Manage your shows" },
-    { title: "Manage Merchandise", icon: ShoppingBag, description: "Update your products" },
-    { title: "Update Playlist", icon: Music, description: "Add inspiring tracks" },
+    { title: "Manage Photos", icon: Camera, description: "Review fan uploads", action: () => {} },
+    { title: "Edit Tour Dates", icon: Calendar, description: "Manage your shows", action: () => setCurrentView('tours') },
+    { title: "Manage Merchandise", icon: ShoppingBag, description: "Update your products", action: () => {} },
+    { title: "Update Playlist", icon: Music, description: "Add inspiring tracks", action: () => {} },
   ];
+
+  if (currentView === 'tours') {
+    return <TourManager onBack={() => setCurrentView('dashboard')} />;
+  }
 
   return (
     <div className="container mx-auto px-6 py-8 space-y-8">
@@ -88,6 +95,7 @@ export const ArtistDashboard = () => {
                 key={index}
                 variant="ghost"
                 className="h-auto p-6 flex flex-col items-center space-y-3 hover:bg-accent/10"
+                onClick={action.action}
               >
                 <action.icon className="w-8 h-8 text-accent" />
                 <div className="text-center">
