@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Users, ShoppingBag, Camera, BarChart3, Plus, Music } from "lucide-react";
 import { Playlist } from "./Playlist";
 import { TourManager } from "./TourManager";
-import { PhotoManager } from "./PhotoManager";
+import { AdvancedPhotoManager } from "./AdvancedPhotoManager";
 
 export const ArtistDashboard = () => {
   const [currentView, setCurrentView] = useState<'dashboard' | 'tours' | 'photos'>('dashboard');
@@ -27,7 +27,7 @@ export const ArtistDashboard = () => {
   }
 
   if (currentView === 'photos') {
-    return <PhotoManager onBack={() => setCurrentView('dashboard')} />;
+    return <AdvancedPhotoManager onBack={() => setCurrentView('dashboard')} />;
   }
 
   return (
