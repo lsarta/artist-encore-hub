@@ -111,11 +111,11 @@ export const BrandNubianPage = ({
       <div className="relative z-10 container mx-auto px-6 py-4">
         
         {/* QR Code */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center">
           <img 
             src="/lovable-uploads/f13ca847-04f4-4d4f-82fb-5ed9c39db305.png" 
             alt="QR Code" 
-            className="w-48 h-48 bg-white rounded-lg p-4 shadow-lg"
+            className="w-64 h-64 bg-white rounded-lg p-4 shadow-lg"
           />
         </div>
 
