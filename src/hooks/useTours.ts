@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export interface Tour {
   id: string;
@@ -81,7 +81,27 @@ const initialTours: Tour[] = [
 ];
 
 export const useTours = () => {
-  const [tours, setTours] = useState<Tour[]>(initialTours);
+  const [tours, setTours] = useState<Tour[]>(() => {
+    // Load from localStorage if available, otherwise use initial tours
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('tours');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (error) {
+          console.error('Error parsing saved tours:', error);
+        }
+      }
+    }
+    return initialTours;
+  });
+
+  // Save tours to localStorage whenever tours change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('tours', JSON.stringify(tours));
+    }
+  }, [tours]);
 
   const addTour = (tour: Omit<Tour, 'id' | 'photoCount' | 'status'>) => {
     const newTour: Tour = {

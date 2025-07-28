@@ -15,6 +15,13 @@ export const ShowGalleryV2 = () => {
   const [showUpload, setShowUpload] = useState(false);
   const [photos, setPhotos] = useState<any[]>([]);
   const [featuredPhoto, setFeaturedPhoto] = useState<any>(null);
+  
+  // Force re-render when tours change
+  const [refreshKey, setRefreshKey] = useState(0);
+  
+  useEffect(() => {
+    setRefreshKey(prev => prev + 1);
+  }, [tours]);
 
   useEffect(() => {
     if (selectedShow) {
