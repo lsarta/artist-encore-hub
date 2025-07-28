@@ -111,9 +111,13 @@ export const BrandNubianPage = ({
       <div className="relative z-10 container mx-auto px-6 py-8">
 
         {/* Artist Title */}
-        <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">
+        <Button 
+          variant="ghost" 
+          className="text-5xl font-bold mb-4 text-white drop-shadow-lg hover:text-white/80 transition-colors p-0 h-auto"
+          onClick={() => window.open('https://outsideai.lovable.app/', '_blank')}
+        >
           Brand Nubian
-        </h1>
+        </Button>
         <Badge variant="secondary" className="mb-8 bg-black/60 backdrop-blur-md border border-white/50 text-white">Hip-Hop Group</Badge>
 
         {/* Artist Bio */}
