@@ -3,7 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Pause, ExternalLink, Music, Calendar, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Play, Pause, ExternalLink, Music, Calendar, ShoppingBag, Camera } from "lucide-react";
+import { ShowGallery } from "@/components/Tours/ShowGallery";
 // Background image for Brand Nubian page
 const brandNubianBackground = "/lovable-uploads/c37f4de1-fa97-41db-8190-62310623a4a1.png";
 interface BrandNubianPageProps {
@@ -14,6 +15,7 @@ export const BrandNubianPage = ({
 }: BrandNubianPageProps) => {
   const [currentTrack, setCurrentTrack] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedShow, setSelectedShow] = useState<any>(null);
   const pastTours = [{
     date: "Friday 30 August 2024",
     venue: "Aretha Franklin Amphitheatre",
@@ -168,6 +170,11 @@ export const BrandNubianPage = ({
       setIsPlaying(true);
     }
   };
+
+  // Show gallery if a show is selected
+  if (selectedShow) {
+    return <ShowGallery show={selectedShow} onBack={() => setSelectedShow(null)} />;
+  }
   return <div className="min-h-screen bg-cover bg-center bg-fixed relative" style={{
     backgroundImage: `url(${brandNubianBackground})`
   }}>
@@ -282,10 +289,19 @@ export const BrandNubianPage = ({
                           </div>
                           <h4 className="font-semibold mb-1">{tour.venue}</h4>
                           <p className="text-sm text-muted-foreground mb-2">{tour.location}</p>
-                          {tour.featuring.length > 0 && <p className="text-xs text-muted-foreground">
+                          {tour.featuring.length > 0 && <p className="text-xs text-muted-foreground mb-2">
                               <span className="font-medium">Featuring:</span> {tour.featuring.join(", ")}
                             </p>}
                         </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setSelectedShow(tour)}
+                          className="ml-4"
+                        >
+                          <Camera className="w-4 h-4 mr-2" />
+                          Gallery
+                        </Button>
                       </div>
                     </div>)}
                 </div>
