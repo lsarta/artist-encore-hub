@@ -108,10 +108,10 @@ export const BrandNubianPage = ({
       {/* Background overlay for readability */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
       
-      <div className="relative z-10 container mx-auto px-6 py-8">
+      <div className="relative z-10 container mx-auto px-6 py-4">
         
         {/* QR Code */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-4">
           <img 
             src="/lovable-uploads/f13ca847-04f4-4d4f-82fb-5ed9c39db305.png" 
             alt="QR Code" 
@@ -122,12 +122,12 @@ export const BrandNubianPage = ({
         {/* Artist Title */}
         <Button 
           variant="ghost" 
-          className="text-5xl font-bold mb-4 text-white drop-shadow-lg hover:text-white/80 transition-colors p-0 h-auto"
+          className="text-5xl font-bold mb-2 text-white drop-shadow-lg hover:text-white/80 transition-colors p-0 h-auto"
           onClick={() => window.open('https://outsideai.lovable.app/', '_blank')}
         >
           Brand Nubian
         </Button>
-        <div className="mb-8">
+        <div className="mb-6">
           <Badge variant="secondary" className="bg-black/60 backdrop-blur-md border border-white/50 text-white">Hip-Hop Group</Badge>
         </div>
 
