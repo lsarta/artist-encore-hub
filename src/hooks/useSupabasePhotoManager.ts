@@ -32,51 +32,67 @@ export const useSupabasePhotoManager = () => {
   ) => {
     setLoading(true);
     try {
-      // Create unique file path
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${tourId}/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      // Create unique file path with simpler naming
+      const fileExt = file.name.split('.').pop() || 'jpg';
+      const timestamp = Date.now();
+      const randomId = Math.random().toString(36).substring(2, 8);
+      const fileName = `${tourId}/${timestamp}_${randomId}.${fileExt}`;
       
       console.log('Uploading file to path:', fileName);
       
-      // Upload to Supabase storage
+      // Upload to Supabase storage with explicit options
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('pictures')
         .upload(fileName, file, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
+          duplex: 'half'
         });
 
       if (uploadError) {
         console.error('Storage upload error:', uploadError);
-        throw uploadError;
+        throw new Error(`Upload failed: ${uploadError.message}`);
       }
 
       console.log('File uploaded successfully:', uploadData);
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
+      // Get public URL using the correct method
+      const { data: urlData } = supabase.storage
         .from('pictures')
         .getPublicUrl(fileName);
 
+      const publicUrl = urlData.publicUrl;
       console.log('Public URL generated:', publicUrl);
 
+      // Verify the URL is accessible
+      try {
+        const response = await fetch(publicUrl, { method: 'HEAD' });
+        console.log('URL accessibility check:', response.status);
+      } catch (urlError) {
+        console.warn('URL accessibility check failed:', urlError);
+      }
+
       // Insert photo submission record
+      const insertData = {
+        tour_id: tourId,
+        file_path: fileName,
+        file_url: publicUrl,
+        caption: caption || null,
+        author_name: authorName || null,
+        instagram_handle: instagramHandle || null,
+      };
+
+      console.log('Inserting photo submission:', insertData);
+
       const { data, error } = await supabase
         .from('photo_submissions')
-        .insert({
-          tour_id: tourId,
-          file_path: fileName,
-          file_url: publicUrl,
-          caption,
-          author_name: authorName,
-          instagram_handle: instagramHandle,
-        })
+        .insert(insertData)
         .select()
         .single();
 
       if (error) {
         console.error('Database insert error:', error);
-        throw error;
+        throw new Error(`Database error: ${error.message}`);
       }
 
       console.log('Photo submission created:', data);
