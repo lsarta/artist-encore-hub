@@ -3,7 +3,9 @@ import { useState } from "react";
 export interface Tour {
   id: string;
   title: string;
+  subtitle?: string;
   date: string;
+  time?: string;
   venue: string;
   city: string;
   status: 'upcoming' | 'past';
@@ -14,7 +16,9 @@ const initialTours: Tour[] = [
   {
     id: "1",
     title: "Outside LLMs Music & AI Buildathon",
+    subtitle: "Outside LLMs",
     date: "2025-07-27",
+    time: "2:00 PM - 8:00 PM",
     venue: "Edge & Node House of Web3",
     city: "San Francisco, California",
     status: "upcoming",

@@ -113,10 +113,20 @@ export const ShowGalleryV2 = () => {
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <h3 className="font-semibold text-lg mb-1">{tour.title}</h3>
+                        {tour.subtitle && (
+                          <p className="text-sm text-muted-foreground mb-2">{tour.subtitle}</p>
+                        )}
                         <div className="space-y-1 text-sm text-muted-foreground">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4" />
-                            <span>{new Date(tour.date).toLocaleDateString()}</span>
+                            <span>
+                              {new Date(tour.date).toLocaleDateString('en-US', {
+                                weekday: 'long',
+                                month: 'long',
+                                day: 'numeric'
+                              })}
+                              {tour.time && ` • ${tour.time}`}
+                            </span>
                           </div>
                           <div className="flex items-center gap-2">
                             <MapPin className="w-4 h-4" />
