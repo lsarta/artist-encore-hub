@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, ExternalLink, Music, Calendar, ShoppingBag, Camera } from "lucide-react";
 import { ShowGallery } from "@/components/Tours/ShowGallery";
+import { usePlaylist } from "@/hooks/usePlaylist";
 // Background image for Brand Nubian page
 const brandNubianBackground = "/lovable-uploads/c37f4de1-fa97-41db-8190-62310623a4a1.png";
 interface BrandNubianPageProps {
@@ -13,6 +14,7 @@ interface BrandNubianPageProps {
 export const BrandNubianPage = ({
   onBack
 }: BrandNubianPageProps) => {
+  const { playlist: curatedPlaylist } = usePlaylist();
   const [currentTrack, setCurrentTrack] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedShow, setSelectedShow] = useState<any>(null);
@@ -118,49 +120,6 @@ export const BrandNubianPage = ({
     venue: "Marina Jeep Arena, Main Street Armory",
     location: "Rochester, NY, US",
     featuring: []
-  }];
-  const curatedPlaylist = [{
-    id: "1",
-    title: "The Message",
-    artist: "Grandmaster Flash & The Furious Five",
-    album: "The Message",
-    duration: "7:11",
-    reason: "The blueprint for conscious rap - showed us hip-hop could have a message"
-  }, {
-    id: "2",
-    title: "Fight the Power",
-    artist: "Public Enemy",
-    album: "Do the Right Thing Soundtrack",
-    duration: "4:45",
-    reason: "Revolutionary energy that inspired our approach to social commentary"
-  }, {
-    id: "3",
-    title: "Me Myself and I",
-    artist: "De La Soul",
-    album: "3 Feet High and Rising",
-    duration: "4:14",
-    reason: "Our Native Tongues family - creative freedom and positive vibes"
-  }, {
-    id: "4",
-    title: "Can I Kick It?",
-    artist: "A Tribe Called Quest",
-    album: "People's Instinctive Travels and the Paths of Rhythm",
-    duration: "4:27",
-    reason: "Jazz samples and smooth flows - major influence on our sound"
-  }, {
-    id: "5",
-    title: "I Know You Got Soul",
-    artist: "Eric B. & Rakim",
-    album: "Paid in Full",
-    duration: "5:05",
-    reason: "Rakim's intellectual approach to lyricism set the bar high"
-  }, {
-    id: "6",
-    title: "The Choice Is Yours",
-    artist: "Black Sheep",
-    album: "A Wolf in Sheep's Clothing",
-    duration: "4:17",
-    reason: "Native Tongues creativity with that raw New York energy"
   }];
   const handlePlayPause = (trackIndex: number) => {
     if (currentTrack === trackIndex && isPlaying) {
