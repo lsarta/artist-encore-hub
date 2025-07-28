@@ -18,11 +18,6 @@ export const DashboardHeader = ({ artistName, isArtistView = false }: DashboardH
           </div>
           
           <div className="flex items-center space-x-4">
-            {isArtistView && (
-              <Button variant="outline" size="sm">
-                View Public Page
-              </Button>
-            )}
             <ModeToggle />
           </div>
         </div>

@@ -12,9 +12,9 @@ export const ArtistDashboard = () => {
   ];
 
   const quickActions = [
-    { title: "Add Tour Date", icon: Calendar, description: "Schedule a new show" },
     { title: "Manage Photos", icon: Camera, description: "Review fan uploads" },
-    { title: "Add Merchandise", icon: ShoppingBag, description: "Create new product" },
+    { title: "Edit Tour Dates", icon: Calendar, description: "Manage your shows" },
+    { title: "Manage Merchandise", icon: ShoppingBag, description: "Update your products" },
     { title: "Update Playlist", icon: Music, description: "Add inspiring tracks" },
   ];
 
@@ -25,6 +25,32 @@ export const ArtistDashboard = () => {
         <h2 className="text-3xl font-bold tracking-tight mb-2">Welcome back!</h2>
         <p className="text-muted-foreground">Here's what's happening with your artist profile.</p>
       </div>
+
+      {/* Photo Management - moved to top */}
+      <Card className="border-0 bg-card/50 backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            Photo Management
+            <Button variant="outline" size="sm">View All</Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center p-4 rounded-lg bg-muted/50">
+              <p className="text-2xl font-bold text-accent">12</p>
+              <p className="text-sm text-muted-foreground">Pending Approval</p>
+            </div>
+            <div className="text-center p-4 rounded-lg bg-muted/50">
+              <p className="text-2xl font-bold text-accent">73</p>
+              <p className="text-sm text-muted-foreground">Featured Photos</p>
+            </div>
+            <div className="text-center p-4 rounded-lg bg-muted/50">
+              <p className="text-2xl font-bold text-accent">156</p>
+              <p className="text-sm text-muted-foreground">Total Gallery</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -121,31 +147,6 @@ export const ArtistDashboard = () => {
         </div>
       </div>
 
-      {/* Photo Management */}
-      <Card className="border-0 bg-card/50 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            Photo Management
-            <Button variant="outline" size="sm">View All</Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 rounded-lg bg-muted/50">
-              <p className="text-2xl font-bold text-accent">12</p>
-              <p className="text-sm text-muted-foreground">Pending Approval</p>
-            </div>
-            <div className="text-center p-4 rounded-lg bg-muted/50">
-              <p className="text-2xl font-bold text-accent">73</p>
-              <p className="text-sm text-muted-foreground">Featured Photos</p>
-            </div>
-            <div className="text-center p-4 rounded-lg bg-muted/50">
-              <p className="text-2xl font-bold text-accent">156</p>
-              <p className="text-sm text-muted-foreground">Total Gallery</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
