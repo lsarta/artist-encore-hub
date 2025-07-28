@@ -100,10 +100,13 @@ export const ShowGalleryV2 = () => {
 
       <div className="grid gap-6">
         <div>
-          <h2 className="text-2xl font-semibold mb-4">Upcoming Shows</h2>
+          <h2 className="text-2xl font-semibold mb-4">All Shows</h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {tours
-              .filter(tour => tour.status === 'upcoming')
+              .sort((a, b) => {
+                // Sort by date, newest first
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+              })
               .map((tour) => (
                 <Card key={tour.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setSelectedShow(tour.id)}>
                   <CardContent className="p-6">
@@ -119,49 +122,14 @@ export const ShowGalleryV2 = () => {
                             <MapPin className="w-4 h-4" />
                             <span>{tour.venue}</span>
                           </div>
-                        </div>
-                      </div>
-                      <Badge variant="secondary">Upcoming</Badge>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Camera className="w-4 h-4" />
-                        <span>{tour.photoCount} photos</span>
-                      </div>
-                      <Button size="sm" variant="outline">
-                        View Gallery
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-          </div>
-        </div>
-
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Past Shows</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {tours
-              .filter(tour => tour.status === 'past')
-              .map((tour) => (
-                <Card key={tour.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setSelectedShow(tour.id)}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="font-semibold text-lg mb-1">{tour.title}</h3>
-                        <div className="space-y-1 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            <span>{new Date(tour.date).toLocaleDateString()}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4" />
-                            <span>{tour.venue}</span>
+                          <div className="text-xs">
+                            {tour.city}
                           </div>
                         </div>
                       </div>
-                      <Badge variant="outline">Past</Badge>
+                      <Badge variant={tour.status === 'upcoming' ? 'default' : 'secondary'}>
+                        {tour.status === 'upcoming' ? 'Upcoming' : 'Past'}
+                      </Badge>
                     </div>
                     
                     <div className="flex items-center justify-between">

@@ -32,35 +32,48 @@ export const useSupabasePhotoManager = () => {
   ) => {
     setLoading(true);
     
-    // Add detailed logging
-    console.log('=== STARTING PHOTO UPLOAD ===');
-    console.log('File:', file.name, 'Size:', file.size, 'Type:', file.type);
-    console.log('Tour ID:', tourId);
-    console.log('Caption:', caption);
-    console.log('Author:', authorName);
-    console.log('Instagram:', instagramHandle);
-    
     try {
-      // Create unique file path with better naming
+      console.log('=== PHOTO UPLOAD START ===');
+      console.log('File details:', {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        tourId,
+        caption,
+        authorName,
+        instagramHandle
+      });
+
+      // Create file path
       const fileExt = file.name.split('.').pop() || 'jpg';
       const timestamp = Date.now();
-      const randomId = Math.random().toString(36).substring(2, 8);
-      const fileName = `${tourId.replace(/\s+/g, '-').toLowerCase()}/${timestamp}_${randomId}.${fileExt}`;
+      const randomStr = Math.random().toString(36).substring(2, 8);
+      const sanitizedTourId = tourId.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+      const fileName = `${sanitizedTourId}/${timestamp}-${randomStr}.${fileExt}`;
       
-      console.log('Generated file path:', fileName);
-      
-      // Upload to NEW bucket
-      console.log('Uploading to pictures-new bucket...');
+      console.log('Upload path:', fileName);
+
+      // Test bucket access first
+      console.log('Testing bucket access...');
+      const { data: bucketTest, error: bucketError } = await supabase.storage
+        .from('pictures-new')
+        .list('', { limit: 1 });
+
+      if (bucketError) {
+        console.error('Bucket access error:', bucketError);
+        throw new Error(`Bucket access failed: ${bucketError.message}`);
+      }
+      console.log('Bucket accessible:', bucketTest);
+
+      // Upload file
+      console.log('Starting file upload...');
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('pictures-new')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+        .upload(fileName, file);
 
       if (uploadError) {
-        console.error('=== UPLOAD ERROR ===', uploadError);
-        throw new Error(`Upload failed: ${uploadError.message}`);
+        console.error('Upload error details:', uploadError);
+        throw new Error(`File upload failed: ${uploadError.message}`);
       }
 
       console.log('Upload successful:', uploadData);
@@ -70,48 +83,59 @@ export const useSupabasePhotoManager = () => {
         .from('pictures-new')
         .getPublicUrl(fileName);
 
-      const publicUrl = urlData.publicUrl;
-      console.log('Generated public URL:', publicUrl);
+      console.log('Public URL:', urlData.publicUrl);
 
-      // Insert into database
-      const insertData = {
+      // Test if we can access the uploaded file
+      try {
+        const testResponse = await fetch(urlData.publicUrl, { method: 'HEAD' });
+        console.log('File accessibility test:', testResponse.status);
+      } catch (testError) {
+        console.warn('File test failed but continuing:', testError);
+      }
+
+      // Insert database record
+      const dbData = {
         tour_id: tourId,
         file_path: fileName,
-        file_url: publicUrl,
+        file_url: urlData.publicUrl,
         caption: caption || null,
         author_name: authorName || null,
-        instagram_handle: instagramHandle || null,
+        instagram_handle: instagramHandle || null
       };
 
-      console.log('Inserting into database:', insertData);
+      console.log('Inserting database record:', dbData);
 
-      const { data: dbData, error: dbError } = await supabase
+      const { data: insertData, error: insertError } = await supabase
         .from('photo_submissions')
-        .insert(insertData)
+        .insert(dbData)
         .select()
         .single();
 
-      if (dbError) {
-        console.error('=== DATABASE ERROR ===', dbError);
-        throw new Error(`Database error: ${dbError.message}`);
+      if (insertError) {
+        console.error('Database insert error:', insertError);
+        throw new Error(`Database save failed: ${insertError.message}`);
       }
 
-      console.log('Database insert successful:', dbData);
+      console.log('Database insert successful:', insertData);
       console.log('=== UPLOAD COMPLETE ===');
 
       toast({
         title: "Photo uploaded successfully!",
-        description: "Your photo is now pending review.",
+        description: "Your photo has been submitted and is pending review.",
       });
 
-      return dbData;
+      return insertData;
+
     } catch (error: any) {
-      console.error('=== FINAL ERROR ===', error);
+      console.error('=== UPLOAD FAILED ===');
+      console.error('Error details:', error);
+      
       toast({
-        title: "Upload failed",
-        description: error.message || "There was an error uploading your photo. Please try again.",
+        title: "Upload Failed",
+        description: error.message || "Failed to upload photo. Please try again.",
         variant: "destructive",
       });
+      
       throw error;
     } finally {
       setLoading(false);
