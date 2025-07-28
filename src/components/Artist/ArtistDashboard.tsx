@@ -5,9 +5,10 @@ import { Calendar, Users, ShoppingBag, Camera, BarChart3, Plus, Music } from "lu
 import { Playlist } from "./Playlist";
 import { TourManager } from "./TourManager";
 import { AdvancedPhotoManager } from "./AdvancedPhotoManager";
+import { InvoiceManager } from "./InvoiceManager";
 
 export const ArtistDashboard = () => {
-  const [currentView, setCurrentView] = useState<'dashboard' | 'tours' | 'photos'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'tours' | 'photos' | 'invoices'>('dashboard');
   const quickStats = [
     { title: "Upcoming Shows", value: "12", icon: Calendar, color: "text-accent" },
     { title: "Total Fans", value: "24.5K", icon: Users, color: "text-accent" },
@@ -18,7 +19,7 @@ export const ArtistDashboard = () => {
   const quickActions = [
     { title: "Manage Photos", icon: Camera, description: "Review fan uploads", action: () => setCurrentView('photos') },
     { title: "Edit Tour Dates", icon: Calendar, description: "Manage your shows", action: () => setCurrentView('tours') },
-    { title: "Manage Merchandise", icon: ShoppingBag, description: "Update your products", action: () => {} },
+    { title: "Manage Invoices", icon: ShoppingBag, description: "Business billing", action: () => setCurrentView('invoices') },
     { title: "Update Playlist", icon: Music, description: "Add inspiring tracks", action: () => {} },
   ];
 
@@ -28,6 +29,10 @@ export const ArtistDashboard = () => {
 
   if (currentView === 'photos') {
     return <AdvancedPhotoManager onBack={() => setCurrentView('dashboard')} />;
+  }
+
+  if (currentView === 'invoices') {
+    return <InvoiceManager onBack={() => setCurrentView('dashboard')} />;
   }
 
   return (
