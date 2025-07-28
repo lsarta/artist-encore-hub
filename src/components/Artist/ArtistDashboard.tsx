@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Users, ShoppingBag, Camera, BarChart3, Plus, Music } from "lucide-react";
 import { Playlist } from "./Playlist";
 import { TourManager } from "./TourManager";
+import { PhotoManager } from "./PhotoManager";
 
 export const ArtistDashboard = () => {
-  const [currentView, setCurrentView] = useState<'dashboard' | 'tours'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'tours' | 'photos'>('dashboard');
   const quickStats = [
     { title: "Upcoming Shows", value: "12", icon: Calendar, color: "text-accent" },
     { title: "Total Fans", value: "24.5K", icon: Users, color: "text-accent" },
@@ -15,7 +16,7 @@ export const ArtistDashboard = () => {
   ];
 
   const quickActions = [
-    { title: "Manage Photos", icon: Camera, description: "Review fan uploads", action: () => {} },
+    { title: "Manage Photos", icon: Camera, description: "Review fan uploads", action: () => setCurrentView('photos') },
     { title: "Edit Tour Dates", icon: Calendar, description: "Manage your shows", action: () => setCurrentView('tours') },
     { title: "Manage Merchandise", icon: ShoppingBag, description: "Update your products", action: () => {} },
     { title: "Update Playlist", icon: Music, description: "Add inspiring tracks", action: () => {} },
@@ -23,6 +24,10 @@ export const ArtistDashboard = () => {
 
   if (currentView === 'tours') {
     return <TourManager onBack={() => setCurrentView('dashboard')} />;
+  }
+
+  if (currentView === 'photos') {
+    return <PhotoManager onBack={() => setCurrentView('dashboard')} />;
   }
 
   return (
