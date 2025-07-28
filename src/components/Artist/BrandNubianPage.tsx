@@ -118,7 +118,9 @@ export const BrandNubianPage = ({
         >
           Brand Nubian
         </Button>
-        <Badge variant="secondary" className="mb-8 bg-black/60 backdrop-blur-md border border-white/50 text-white">Hip-Hop Group</Badge>
+        <div className="mb-8">
+          <Badge variant="secondary" className="bg-black/60 backdrop-blur-md border border-white/50 text-white">Hip-Hop Group</Badge>
+        </div>
 
         {/* Artist Bio */}
         <div className="prose prose-lg text-white/90 max-w-none drop-shadow-md mb-8">
