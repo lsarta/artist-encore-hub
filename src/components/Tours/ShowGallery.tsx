@@ -230,28 +230,31 @@ export const ShowGallery = ({ show, onBack }: ShowGalleryProps) => {
                   const filePath = `${eventSlug}/${Date.now()}_${file.name}`;
 
                   const { error: uploadError } = await supabase.storage
-                    .from("pictures")
+                    .from("pictures-new")
                     .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
                   if (uploadError) {
-                    toast({ title: "Upload failed", description: uploadError.message });
+                    console.error('Upload error:', uploadError);
+                    toast({ title: "Upload failed", description: uploadError.message, variant: "destructive" });
                     return;
                   }
 
-                  const { data: publicUrlData } = supabase.storage.from("pictures").getPublicUrl(filePath);
+                  const { data: publicUrlData } = supabase.storage.from("pictures-new").getPublicUrl(filePath);
 
                   const { error: insertError } = await supabase
-                    .from("user info")
+                    .from("photo_submissions")
                     .insert({
-                      name,
-                      email,
+                      tour_id: eventSlug,
+                      file_path: filePath,
+                      file_url: publicUrlData?.publicUrl,
                       caption,
-                      event_name: show.venue,
-                      photo_path: filePath,
+                      author_name: name,
+                      instagram_handle: email // Using email field temporarily for instagram
                     });
 
                   if (insertError) {
-                    toast({ title: "Database error", description: insertError.message });
+                    console.error('Database error:', insertError);
+                    toast({ title: "Database error", description: insertError.message, variant: "destructive" });
                     return;
                   }
 

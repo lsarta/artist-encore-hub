@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, ExternalLink, Music, Calendar, ShoppingBag, Camera } from "lucide-react";
 import { ShowGallery } from "@/components/Tours/ShowGallery";
 import { usePlaylist } from "@/hooks/usePlaylist";
+import { useTours } from "@/hooks/useTours";
 // Background image for Brand Nubian page
 const brandNubianBackground = "/lovable-uploads/c37f4de1-fa97-41db-8190-62310623a4a1.png";
 interface BrandNubianPageProps {
@@ -15,9 +16,12 @@ export const BrandNubianPage = ({
   onBack
 }: BrandNubianPageProps) => {
   const { playlist: curatedPlaylist } = usePlaylist();
+  const { tours } = useTours();
   const [currentTrack, setCurrentTrack] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedShow, setSelectedShow] = useState<any>(null);
+  
+  // Legacy tours data for historical shows
   const pastTours = [{
     date: "Friday 30 August 2024",
     venue: "Aretha Franklin Amphitheatre",
@@ -65,62 +69,26 @@ export const BrandNubianPage = ({
     location: "Mableton, GA, US",
     featuring: ["KRS-One", "Big Daddy Kane", "and 2 others"],
     outdoor: true
-  }, {
-    date: "Saturday 02 April 2022",
-    venue: "XL Live",
-    location: "Harrisburg, PA, US",
-    featuring: ["Rakim"]
-  }, {
-    date: "Thursday 19 August 2021",
-    venue: "Martha's Vineyard Soulfest 2021 - The Loft",
-    location: "Oak Bluffs, MA, US",
-    featuring: []
-  }, {
-    date: "Thursday 18 July 2019",
-    venue: "The Anthem",
-    location: "Washington, DC, US",
-    featuring: ["Monie Love", "DJ Maseo", "and 1 other"]
-  }, {
-    date: "Friday 18 January 2019",
-    venue: "Apollo Theater",
-    location: "Manhattan, NY, US",
-    featuring: ["Rakim", "EPMD", "and 2 others"]
-  }, {
-    date: "Friday 14 September 2018",
-    venue: "S.O.B.'s",
-    location: "Manhattan, NY, US",
-    featuring: ["Artifacts", "Main Source", "and 1 other"]
-  }, {
-    date: "Friday 15 June 2018",
-    venue: "The Promontory",
-    location: "Chicago, IL, US",
-    featuring: []
-  }, {
-    date: "Friday 23 February 2018",
-    venue: "New Jersey Performing Arts Center",
-    location: "Newark, NJ, US",
-    featuring: ["Bone Thugs-n-Harmony", "Big Daddy Kane", "and 4 others"]
-  }, {
-    date: "Saturday 09 September 2017",
-    venue: "Underground Arts",
-    location: "Philadelphia, PA, US",
-    featuring: ["Das EFX"]
-  }, {
-    date: "Saturday 15 July 2017",
-    venue: "The New Parish",
-    location: "Oakland, CA, US",
-    featuring: ["Grand Puba", "Sadat X"]
-  }, {
-    date: "Thursday 08 June 2017",
-    venue: "Underground Arts",
-    location: "Philadelphia, PA, US",
-    featuring: ["Das EFX"]
-  }, {
-    date: "Saturday 22 April 2017",
-    venue: "Marina Jeep Arena, Main Street Armory",
-    location: "Rochester, NY, US",
-    featuring: []
   }];
+
+  // Combine current tours with legacy tours for display
+  const allTours = [
+    ...tours.map(tour => ({
+      date: new Date(tour.date).toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      }) + (tour.time ? ` • ${tour.time}` : ''),
+      venue: tour.title,
+      location: `${tour.venue} • ${tour.city}`,
+      featuring: tour.subtitle ? [tour.subtitle] : [],
+      isNew: true,
+      status: tour.status,
+      tourData: tour
+    })),
+    ...pastTours.map(tour => ({ ...tour, isNew: false, status: 'past' }))
+  ];
   const handlePlayPause = (trackIndex: number) => {
     if (currentTrack === trackIndex && isPlaying) {
       setIsPlaying(false);
@@ -229,40 +197,48 @@ export const BrandNubianPage = ({
             <Card className="border-0 bg-card/50 backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="mb-6">
-                  <h3 className="text-2xl font-semibold mb-2">Post Show Archives</h3>
-                  <p className="text-muted-foreground">Past Brand Nubian performances and tour history</p>
+                  <h3 className="text-2xl font-semibold mb-2">Tours & Shows</h3>
+                  <p className="text-muted-foreground">Upcoming events and past Brand Nubian performances</p>
                   <Badge variant="secondary" className="mt-2">
-                    {pastTours.length} past shows
+                    {tours.filter(t => t.status === 'upcoming').length} upcoming • {allTours.filter(t => t.status === 'past').length} past shows
                   </Badge>
                 </div>
                 
+                
                 <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {pastTours.map((tour, index) => <div key={index} className="p-4 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors border-l-4 border-accent/30">
+                  {allTours.map((tour, index) => (
+                    <div key={index} className={`p-4 rounded-lg transition-colors border-l-4 ${tour.status === 'upcoming' ? 'bg-accent/10 border-accent hover:bg-accent/20' : 'bg-muted/20 hover:bg-muted/40 border-accent/30'}`}>
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <Calendar className="w-4 h-4 text-muted-foreground" />
                             <span className="font-medium text-sm text-muted-foreground">{tour.date}</span>
-                            <Badge variant="outline" className="text-xs">Completed</Badge>
-                            {tour.outdoor && <Badge variant="secondary" className="text-xs">Outdoor</Badge>}
+                             <Badge variant={tour.status === 'upcoming' ? 'default' : 'outline'} className="text-xs">
+                               {tour.status === 'upcoming' ? 'Upcoming' : 'Completed'}
+                             </Badge>
+                             {tour.isNew && <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">New</Badge>}
+                             {(tour as any).outdoor && <Badge variant="secondary" className="text-xs">Outdoor</Badge>}
                           </div>
                           <h4 className="font-semibold mb-1">{tour.venue}</h4>
                           <p className="text-sm text-muted-foreground mb-2">{tour.location}</p>
-                          {tour.featuring.length > 0 && <p className="text-xs text-muted-foreground mb-2">
+                          {tour.featuring.length > 0 && (
+                            <p className="text-xs text-muted-foreground mb-2">
                               <span className="font-medium">Featuring:</span> {tour.featuring.join(", ")}
-                            </p>}
+                            </p>
+                          )}
                         </div>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setSelectedShow(tour)}
-                          className="ml-4"
+                         <Button 
+                           variant="outline" 
+                           size="sm"
+                           onClick={() => setSelectedShow((tour as any).tourData || tour)}
+                           className="ml-4"
                         >
                           <Camera className="w-4 h-4 mr-2" />
-                          Gallery
+                          {tour.status === 'upcoming' ? 'Preview' : 'Gallery'}
                         </Button>
                       </div>
-                    </div>)}
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
