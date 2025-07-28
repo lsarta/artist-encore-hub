@@ -36,17 +36,29 @@ export const useSupabasePhotoManager = () => {
       const fileExt = file.name.split('.').pop();
       const fileName = `${tourId}/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
       
+      console.log('Uploading file to path:', fileName);
+      
       // Upload to Supabase storage
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('pictures')
-        .upload(fileName, file);
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('File uploaded successfully:', uploadData);
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('pictures')
         .getPublicUrl(fileName);
+
+      console.log('Public URL generated:', publicUrl);
 
       // Insert photo submission record
       const { data, error } = await supabase
@@ -62,7 +74,12 @@ export const useSupabasePhotoManager = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database insert error:', error);
+        throw error;
+      }
+
+      console.log('Photo submission created:', data);
 
       toast({
         title: "Photo uploaded successfully!",
@@ -70,11 +87,11 @@ export const useSupabasePhotoManager = () => {
       });
 
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading photo:', error);
       toast({
         title: "Upload failed",
-        description: "There was an error uploading your photo. Please try again.",
+        description: error.message || "There was an error uploading your photo. Please try again.",
         variant: "destructive",
       });
       throw error;

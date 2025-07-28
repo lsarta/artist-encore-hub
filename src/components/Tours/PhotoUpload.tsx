@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, Image } from 'lucide-react';
 import { useSupabasePhotoManager } from '@/hooks/useSupabasePhotoManager';
+import { useToast } from '@/hooks/use-toast';
 
 interface PhotoUploadProps {
   tourId: string;
@@ -21,6 +22,7 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   
   const { uploadPhoto, loading } = useSupabasePhotoManager();
+  const { toast } = useToast();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -34,7 +36,14 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!selectedFile) return;
+    if (!selectedFile) {
+      toast({
+        title: "No file selected",
+        description: "Please select a photo to upload.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
       await uploadPhoto(
@@ -59,6 +68,7 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
       onUploadComplete?.();
     } catch (error) {
       console.error('Upload failed:', error);
+      // Error handling is already done in the hook
     }
   };
 

@@ -13,9 +13,9 @@ export interface Tour {
 const initialTours: Tour[] = [
   {
     id: "1",
-    title: "Summer Festival 2024",
-    date: "2024-08-15",
-    venue: "Central Park",
+    title: "Brand Nubian Live",
+    date: "2024-12-15",
+    venue: "Madison Square Garden",
     city: "New York, NY",
     status: "upcoming",
     photoCount: 0
