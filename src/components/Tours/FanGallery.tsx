@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +26,11 @@ interface FanGalleryProps {
 
 export const FanGallery = ({ show, onBack }: FanGalleryProps) => {
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [caption, setCaption] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const { toast } = useToast();
 
   // Mock gallery photos - these would come from your backend
   const galleryPhotos = [
@@ -77,6 +84,14 @@ export const FanGallery = ({ show, onBack }: FanGalleryProps) => {
   const featuredPhotos = galleryPhotos.filter(photo => photo.featured);
   const regularPhotos = galleryPhotos.filter(photo => !photo.featured);
 
+  // Helper to create URL-safe folder names
+  const slugify = (str: string) =>
+    str
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^\-+|\-+$/g, "");
+
   return (
     <div className="container mx-auto px-6 py-8">
       <div className="mb-8">
@@ -116,18 +131,91 @@ export const FanGallery = ({ show, onBack }: FanGalleryProps) => {
               <div className="space-y-4">
                 <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
                   <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground mb-2">Click to upload or drag and drop</p>
-                  <p className="text-xs text-muted-foreground">PNG, JPG up to 10MB</p>
+                  <p className="text-sm text-muted-foreground mb-2">Select a photo to upload</p>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Caption</label>
-                  <Textarea placeholder="Tell us about this moment..." className="resize-none" rows={3} />
+                  <Textarea
+                    placeholder="Tell us about this moment..."
+                    className="resize-none"
+                    rows={3}
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Name</label>
+                  <Input
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Email</label>
+                  <Input
+                    type="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 <div className="flex gap-3">
                   <Button variant="outline" onClick={() => setUploadDialogOpen(false)} className="flex-1">
                     Cancel
                   </Button>
-                  <Button className="flex-1">Upload</Button>
+                  <Button
+                    className="flex-1"
+                    onClick={async () => {
+                      if (!file) {
+                        toast({ title: "No file selected" });
+                        return;
+                      }
+                      const eventSlug = slugify(show.title);
+                      const filePath = `${eventSlug}/${Date.now()}_${file.name}`;
+                      const { error: uploadError } = await supabase.storage
+                        .from("pictures") // bucket name
+                        .upload(filePath, file, {
+                          cacheControl: "3600",
+                          upsert: false,
+                        });
+
+                      if (uploadError) {
+                        toast({ title: "Upload failed", description: uploadError.message });
+                        return;
+                      }
+
+                      const { error: insertError } = await supabase
+                        .from("user info")
+                        .insert({
+                          name,
+                          email,
+                          caption,
+                          event_name: show.title,
+                          photo_path: filePath,
+                        });
+
+                      if (insertError) {
+                        toast({ title: "Database error", description: insertError.message });
+                        return;
+                      }
+
+                      toast({ title: "Photo uploaded successfully" });
+                      // Reset fields
+                      setFile(null);
+                      setCaption("");
+                      setName("");
+                      setEmail("");
+                      setUploadDialogOpen(false);
+                    }}
+                  >
+                    Upload
+                  </Button>
                 </div>
               </div>
             </DialogContent>

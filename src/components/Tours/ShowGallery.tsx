@@ -1,4 +1,9 @@
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -50,9 +55,22 @@ export const ShowGallery = ({ show, onBack }: ShowGalleryProps) => {
   const artistFeaturedPhoto = photos.find(photo => photo.isArtistFeatured);
   const fanPhotos = photos.filter(photo => !photo.isArtistFeatured);
 
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [caption, setCaption] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const { toast } = useToast();
+
+  const slugify = (str: string) =>
+    str
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^\-+|\-+$/g, "");
+
   const handleAddPhoto = () => {
-    // In a real app, this would open a file picker
-    console.log("Add photo functionality would be implemented here");
+    setUploadDialogOpen(true);
   };
 
   return (
@@ -154,6 +172,117 @@ export const ShowGallery = ({ show, onBack }: ShowGalleryProps) => {
           </CardContent>
         </Card>
       </div>
+      <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
+        <DialogTrigger asChild></DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Upload Photo</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
+              <Camera className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground mb-2">Select a photo to upload</p>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Caption</label>
+              <Textarea
+                placeholder="Tell us about this moment..."
+                className="resize-none"
+                rows={3}
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Name</label>
+              <Input
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Email</label>
+              <Input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => setUploadDialogOpen(false)} className="flex-1">
+                Cancel
+              </Button>
+              <Button
+                className="flex-1"
+                onClick={async () => {
+                  if (!file) {
+                    toast({ title: "No file selected" });
+                    return;
+                  }
+                  const eventSlug = slugify(show.venue);
+                  const filePath = `${eventSlug}/${Date.now()}_${file.name}`;
+
+                  const { error: uploadError } = await supabase.storage
+                    .from("pictures")
+                    .upload(filePath, file, { cacheControl: "3600", upsert: false });
+
+                  if (uploadError) {
+                    toast({ title: "Upload failed", description: uploadError.message });
+                    return;
+                  }
+
+                  const { data: publicUrlData } = supabase.storage.from("pictures").getPublicUrl(filePath);
+
+                  const { error: insertError } = await supabase
+                    .from("user info")
+                    .insert({
+                      name,
+                      email,
+                      caption,
+                      event_name: show.venue,
+                      photo_path: filePath,
+                    });
+
+                  if (insertError) {
+                    toast({ title: "Database error", description: insertError.message });
+                    return;
+                  }
+
+                  toast({ title: "Photo uploaded successfully" });
+
+                  // Update gallery locally
+                  setPhotos(prev => [
+                    ...prev,
+                    {
+                      id: Date.now().toString(),
+                      url: publicUrlData?.publicUrl ?? "", // fallback empty
+                      isArtistFeatured: false,
+                      caption: caption,
+                      uploader: "fan",
+                    },
+                  ]);
+
+                  // Reset form
+                  setFile(null);
+                  setCaption("");
+                  setName("");
+                  setEmail("");
+                  setUploadDialogOpen(false);
+                }}
+              >
+                Upload
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
