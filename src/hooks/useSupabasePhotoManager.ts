@@ -53,23 +53,27 @@ export const useSupabasePhotoManager = () => {
       
       console.log('Upload path:', fileName);
 
-      // Test bucket access first
-      console.log('Testing bucket access...');
-      const { data: bucketTest, error: bucketError } = await supabase.storage
-        .from('pictures-new')
-        .list('', { limit: 1 });
+      // Create a simple anonymous client for upload
+      const { createClient } = await import('@supabase/supabase-js');
+      const anonClient = createClient(
+        "https://ajqnkddszqtfbjnyamuk.supabase.co", 
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqcW5rZGRzenF0ZmJqbnlhbXVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NjE4NTQsImV4cCI6MjA2OTIzNzg1NH0.XbvHSXJ5UYBuMGFx02tALA3pUhs_bEHSW2UPfJX79e0",
+        {
+          auth: {
+            persistSession: false,
+            autoRefreshToken: false
+          }
+        }
+      );
 
-      if (bucketError) {
-        console.error('Bucket access error:', bucketError);
-        throw new Error(`Bucket access failed: ${bucketError.message}`);
-      }
-      console.log('Bucket accessible:', bucketTest);
-
-      // Upload file
-      console.log('Starting file upload...');
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      // Upload file using anonymous client
+      console.log('Starting file upload with anonymous client...');
+      const { data: uploadData, error: uploadError } = await anonClient.storage
         .from('pictures-new')
-        .upload(fileName, file);
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
       if (uploadError) {
         console.error('Upload error details:', uploadError);
@@ -79,21 +83,13 @@ export const useSupabasePhotoManager = () => {
       console.log('Upload successful:', uploadData);
 
       // Get public URL
-      const { data: urlData } = supabase.storage
+      const { data: urlData } = anonClient.storage
         .from('pictures-new')
         .getPublicUrl(fileName);
 
       console.log('Public URL:', urlData.publicUrl);
 
-      // Test if we can access the uploaded file
-      try {
-        const testResponse = await fetch(urlData.publicUrl, { method: 'HEAD' });
-        console.log('File accessibility test:', testResponse.status);
-      } catch (testError) {
-        console.warn('File test failed but continuing:', testError);
-      }
-
-      // Insert database record
+      // Insert database record using the main client
       const dbData = {
         tour_id: tourId,
         file_path: fileName,
