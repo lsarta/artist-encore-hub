@@ -74,18 +74,18 @@ export const BrandNubianPage = ({
   // Combine current tours with legacy tours for display
   const allTours = [
     ...tours.map(tour => ({
-      date: new Date(tour.date).toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        day: 'numeric', 
-        month: 'long', 
-        year: 'numeric' 
-      }) + (tour.time ? ` • ${tour.time}` : ''),
       venue: tour.title,
       location: `${tour.venue} • ${tour.city}`,
       featuring: tour.subtitle ? [tour.subtitle] : [],
       isNew: true,
       status: tour.status,
-      tourData: tour
+      tourData: tour,
+      date: new Date(tour.date).toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      }) + (tour.time ? ` • ${tour.time}` : '')
     })),
     ...pastTours.map(tour => ({ ...tour, isNew: false, status: 'past' }))
   ];

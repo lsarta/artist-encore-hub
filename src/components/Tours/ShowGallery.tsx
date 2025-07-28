@@ -98,7 +98,7 @@ export const ShowGallery = ({ show, onBack }: ShowGalleryProps) => {
           </h1>
           <p className="text-lg text-white/90 mb-2">{show.location}</p>
           <p className="text-white/80 mb-4">{show.date}</p>
-          {show.featuring.length > 0 && (
+          {show.featuring && show.featuring.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="text-white/90 text-sm">Featuring:</span>
               {show.featuring.map((artist, index) => (
