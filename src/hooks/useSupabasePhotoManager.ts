@@ -31,48 +31,49 @@ export const useSupabasePhotoManager = () => {
     instagramHandle?: string
   ) => {
     setLoading(true);
+    
+    // Add detailed logging
+    console.log('=== STARTING PHOTO UPLOAD ===');
+    console.log('File:', file.name, 'Size:', file.size, 'Type:', file.type);
+    console.log('Tour ID:', tourId);
+    console.log('Caption:', caption);
+    console.log('Author:', authorName);
+    console.log('Instagram:', instagramHandle);
+    
     try {
-      // Create unique file path with simpler naming
+      // Create unique file path with better naming
       const fileExt = file.name.split('.').pop() || 'jpg';
       const timestamp = Date.now();
       const randomId = Math.random().toString(36).substring(2, 8);
-      const fileName = `${tourId}/${timestamp}_${randomId}.${fileExt}`;
+      const fileName = `${tourId.replace(/\s+/g, '-').toLowerCase()}/${timestamp}_${randomId}.${fileExt}`;
       
-      console.log('Uploading file to path:', fileName);
+      console.log('Generated file path:', fileName);
       
-      // Upload to Supabase storage with explicit options
+      // Upload to NEW bucket
+      console.log('Uploading to pictures-new bucket...');
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('pictures')
+        .from('pictures-new')
         .upload(fileName, file, {
           cacheControl: '3600',
-          upsert: false,
-          duplex: 'half'
+          upsert: false
         });
 
       if (uploadError) {
-        console.error('Storage upload error:', uploadError);
+        console.error('=== UPLOAD ERROR ===', uploadError);
         throw new Error(`Upload failed: ${uploadError.message}`);
       }
 
-      console.log('File uploaded successfully:', uploadData);
+      console.log('Upload successful:', uploadData);
 
-      // Get public URL using the correct method
+      // Get public URL
       const { data: urlData } = supabase.storage
-        .from('pictures')
+        .from('pictures-new')
         .getPublicUrl(fileName);
 
       const publicUrl = urlData.publicUrl;
-      console.log('Public URL generated:', publicUrl);
+      console.log('Generated public URL:', publicUrl);
 
-      // Verify the URL is accessible
-      try {
-        const response = await fetch(publicUrl, { method: 'HEAD' });
-        console.log('URL accessibility check:', response.status);
-      } catch (urlError) {
-        console.warn('URL accessibility check failed:', urlError);
-      }
-
-      // Insert photo submission record
+      // Insert into database
       const insertData = {
         tour_id: tourId,
         file_path: fileName,
@@ -82,29 +83,30 @@ export const useSupabasePhotoManager = () => {
         instagram_handle: instagramHandle || null,
       };
 
-      console.log('Inserting photo submission:', insertData);
+      console.log('Inserting into database:', insertData);
 
-      const { data, error } = await supabase
+      const { data: dbData, error: dbError } = await supabase
         .from('photo_submissions')
         .insert(insertData)
         .select()
         .single();
 
-      if (error) {
-        console.error('Database insert error:', error);
-        throw new Error(`Database error: ${error.message}`);
+      if (dbError) {
+        console.error('=== DATABASE ERROR ===', dbError);
+        throw new Error(`Database error: ${dbError.message}`);
       }
 
-      console.log('Photo submission created:', data);
+      console.log('Database insert successful:', dbData);
+      console.log('=== UPLOAD COMPLETE ===');
 
       toast({
         title: "Photo uploaded successfully!",
         description: "Your photo is now pending review.",
       });
 
-      return data;
+      return dbData;
     } catch (error: any) {
-      console.error('Error uploading photo:', error);
+      console.error('=== FINAL ERROR ===', error);
       toast({
         title: "Upload failed",
         description: error.message || "There was an error uploading your photo. Please try again.",
@@ -118,6 +120,7 @@ export const useSupabasePhotoManager = () => {
 
   const getPhotosByTour = useCallback(async (tourId: string) => {
     try {
+      console.log('Fetching photos for tour:', tourId);
       const { data, error } = await supabase
         .from('photo_submissions')
         .select('*')
@@ -127,6 +130,7 @@ export const useSupabasePhotoManager = () => {
 
       if (error) throw error;
       
+      console.log('Found photos:', data?.length || 0);
       setPhotos(data as PhotoSubmission[] || []);
       return data as PhotoSubmission[] || [];
     } catch (error) {

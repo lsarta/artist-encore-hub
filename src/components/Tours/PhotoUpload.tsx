@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Upload, Image } from 'lucide-react';
+import { Upload, Image, X } from 'lucide-react';
 import { useSupabasePhotoManager } from '@/hooks/useSupabasePhotoManager';
 import { useToast } from '@/hooks/use-toast';
 
@@ -27,10 +27,41 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select an image file.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Validate file size (10MB max)
+      if (file.size > 10 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please select an image smaller than 10MB.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       setSelectedFile(file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
     }
+  };
+
+  const handleRemoveFile = () => {
+    setSelectedFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    // Reset file input
+    const fileInput = document.getElementById('photo-upload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,13 +76,23 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
       return;
     }
 
+    if (!authorName.trim()) {
+      toast({
+        title: "Name required",
+        description: "Please enter your name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
+      console.log('Starting upload process...');
       await uploadPhoto(
         selectedFile,
         tourId,
-        caption || undefined,
-        authorName || undefined,
-        instagramHandle || undefined
+        caption.trim() || undefined,
+        authorName.trim(),
+        instagramHandle.trim() || undefined
       );
       
       // Reset form
@@ -59,15 +100,11 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
       setCaption('');
       setAuthorName('');
       setInstagramHandle('');
-      setPreviewUrl(null);
-      
-      // Reset file input
-      const fileInput = document.getElementById('photo-upload') as HTMLInputElement;
-      if (fileInput) fileInput.value = '';
+      handleRemoveFile();
       
       onUploadComplete?.();
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error('Upload failed in component:', error);
       // Error handling is already done in the hook
     }
   };
@@ -86,33 +123,47 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="photo-upload">Photo</Label>
+            <Label htmlFor="photo-upload">Photo *</Label>
             <Input
               id="photo-upload"
               type="file"
               accept="image/*"
               onChange={handleFileSelect}
               required
+              className="cursor-pointer"
             />
+            <p className="text-xs text-muted-foreground mt-1">
+              Max size: 10MB. Formats: JPG, PNG, GIF, WebP
+            </p>
           </div>
           
           {previewUrl && (
-            <div className="mt-4">
+            <div className="relative">
               <img
                 src={previewUrl}
                 alt="Preview"
                 className="w-full h-32 object-cover rounded-md border"
               />
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                className="absolute top-2 right-2 h-6 w-6 p-0"
+                onClick={handleRemoveFile}
+              >
+                <X className="h-3 w-3" />
+              </Button>
             </div>
           )}
 
           <div>
-            <Label htmlFor="author-name">Your Name</Label>
+            <Label htmlFor="author-name">Your Name *</Label>
             <Input
               id="author-name"
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               placeholder="Enter your name"
+              required
             />
           </div>
 
@@ -121,9 +172,19 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
             <Input
               id="instagram-handle"
               value={instagramHandle}
-              onChange={(e) => setInstagramHandle(e.target.value)}
-              placeholder="@yourusername"
+              onChange={(e) => {
+                let value = e.target.value;
+                // Remove @ if user adds it
+                if (value.startsWith('@')) {
+                  value = value.substring(1);
+                }
+                setInstagramHandle(value);
+              }}
+              placeholder="yourusername (without @)"
             />
+            <p className="text-xs text-muted-foreground mt-1">
+              Optional: Your Instagram username (we'll add the @)
+            </p>
           </div>
 
           <div>
@@ -140,7 +201,7 @@ export const PhotoUpload = ({ tourId, tourTitle, onUploadComplete }: PhotoUpload
           <Button
             type="submit"
             className="w-full"
-            disabled={!selectedFile || loading}
+            disabled={!selectedFile || !authorName.trim() || loading}
           >
             {loading ? (
               <>

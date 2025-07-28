@@ -13,15 +13,6 @@ export interface Tour {
 const initialTours: Tour[] = [
   {
     id: "1",
-    title: "Brand Nubian Live",
-    date: "2024-12-15",
-    venue: "Madison Square Garden",
-    city: "New York, NY",
-    status: "upcoming",
-    photoCount: 0
-  },
-  {
-    id: "2",
     title: "Outside LLMs Music & AI Buildathon",
     date: "2025-07-27",
     venue: "Edge & Node House of Web3",
@@ -30,7 +21,25 @@ const initialTours: Tour[] = [
     photoCount: 0
   },
   {
+    id: "2",
+    title: "Brand Nubian Live",
+    date: "2024-12-15",
+    venue: "Madison Square Garden",
+    city: "New York, NY",
+    status: "upcoming",
+    photoCount: 0
+  },
+  {
     id: "3", 
+    title: "Summer Festival 2024",
+    date: "2024-08-15",
+    venue: "Central Park",
+    city: "New York, NY",
+    status: "upcoming",
+    photoCount: 0
+  },
+  {
+    id: "4",
     title: "Acoustic Night",
     date: "2024-09-22",
     venue: "The Blue Note",
@@ -39,7 +48,7 @@ const initialTours: Tour[] = [
     photoCount: 0
   },
   {
-    id: "4",
+    id: "5",
     title: "Winter Tour 2023",
     date: "2023-12-10",
     venue: "Madison Square Garden",
@@ -48,7 +57,7 @@ const initialTours: Tour[] = [
     photoCount: 24
   },
   {
-    id: "5",
+    id: "6",
     title: "Indie Rock Festival",
     date: "2023-11-05", 
     venue: "Red Rocks",
@@ -57,7 +66,7 @@ const initialTours: Tour[] = [
     photoCount: 18
   },
   {
-    id: "6",
+    id: "7",
     title: "Album Release Party",
     date: "2023-10-15",
     venue: "The Troubadour", 
